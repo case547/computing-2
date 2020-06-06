@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en-gb">
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="Justin Mak">
+    <meta name="description" content="Justin's Computing 2 Project | Dish nutrient calculation tool">
+    <title>Nutri</title>
+    <link rel="stylesheet" href="default.css">
+    <link rel="shortcut icon" href="favicon.png">
+    <script type="module" src="main.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Title 🌶️</h1>
+    </header>
+
+    <main>
+        <section id="landing">
+            <h2>Hello, <span id="username" name="username"></h2>
+            <button id="create-newdish" class="landing-button">Create a new dish</button>
+            <button id="view" class="landing-button">View your dishes</button>
+            <button id="browse" class="landing-button">Browse all dishes</button>
+        </section>
+        <section id="my-dishes">
+            <h2>My dishes</h2>
+            <button id="create-mydish">Create new dish</button>
+            <textarea placeholder="Find a dish"></textarea>
+            <table>
+                <template id="dish-row">
+                    <tr>
+                        <td class="dish-name">Example Dish</td>
+                        <td class="ingredients">Ingredient 1, ingredient 2</td>
+                        <td id="edit-button" class="table-button">
+                            <button>✏️</button>
+                        </td>
+                        <td id="del-button" class="table-button">
+                            <button>🗑️</button>
+                        </td>
+                    </tr>
+                </template>
+            </table>
+        </section>
+        <section id="dish-editor">
+            <div class="dish-setting" name="dish-title">
+                <h2><span id="dish-name" name="dish-name"></span></h2>
+                <textarea id="namer" class="setting-pane"></textarea>
+                <button>(edit)</button>
+                <button>Save</button>
+                <h2>Portions</h2>
+            </div>
+        </section>
+</body>
+</html>
