@@ -3,9 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="author" content="Justin Mak">
-    <meta name="description" content="Justin's Computing 2 Project | Dish nutrient calculation tool">
+    <meta name="description" content="Justin's Computing 2 Project | Dish nutrient calculator">
     <title>Nutri</title>
     <link rel="stylesheet" href="default.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"> 
     <link rel="shortcut icon" href="favicon.png">
     <script type="module" src="main.js"></script>
 </head>
@@ -18,55 +19,83 @@
 <main>
     <section id="landing">
         <h2>Hello, <span id="username" name="username"></h2>
-        <button id="create-newdish" class="landing-button">Create a new dish</button>
-        <button id="view" class="landing-button">View your dishes</button>
-        <button id="browse" class="landing-button">Browse all dishes</button>
+        <div class="menu">
+            <button id="create-newdish" class="landing-button">Create a new dish</button>
+            <button id="view" class="landing-button">View your dishes</button>
+            <button id="browse" class="landing-button">Browse all dishes</button>
+        </div>
     </section>
     <section id="my-dishes">
         <h2>My dishes</h2>
         <button id="create-mydish">Create new dish</button>
-        <textarea placeholder="Find a dish"></textarea>
-        <table>
-            <template id="dish-row">
-                <tr>
-                    <td class="dish-name">Example Dish</td>
-                    <td class="ingredients">Ingredient 1, ingredient 2</td>
-                    <td id="edit-button" class="table-button">
-                        <button>✏️</button>
-                    </td>
-                    <td id="del-button" class="table-button">
-                        <button>🗑️</button>
-                    </td>
-                </tr>
-            </template>
-        </table>
+        <label for="dish-search"></label>
+        <input id="dish-search" name="dish-search" placeholder="Find a dish" title="Find a dish" type="text"></
+        <div id="dish-list">    
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Portions</th>
+                        <th>Ingredients</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template id="dish-row">
+                        <tr>
+                            <td class="dish-name">Example Dish</td>
+                            <td class="dish-portions">1</td>
+                            <td class="ingredients">Ingredient 1, ingredient 2</td>
+                            <td class="edit-button">
+                                <button>✏️</button>
+                            </td>
+                            <td class="del-button">
+                                <button>🗑️</button>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+        <div class="footer">
+            <button class="left-button">Homepage</button>
+        </div>
     </section>
     <section id="dish-editor">
-        <h2 class="dish-title">
-            <span id="dish-title" name="dish-title"></span>
-        </h2>
+        <h2 id="dish-title">Dish Title</h2>
         <div class="dish-settings">
-            <form>
-                <div class="entry">
-                    <label for="dish-name">Dish:</label>
-                    <input id="dish-name"></input>
-                </div>
-                <div class="entry">
-                    <label for="portions">Portions:</label>
-                    <input id="portions"></input>
+            <form action="/" class="edit-dish" id="dish-form" method="post" onsubmit="">
+                <div class="entries">
+                    <div class="entry">
+                        <label for="dish-name">Dish:</label>
+                        <input id="dish-name" name="dish-name" placeholder="Name your dish and press Enter" title="Enter dish and press Enter" type="text" value="">
+                    </div>
+                    <div class="entry">
+                        <label for="portions">Portions:</label>
+                        <input id="portions" name="portions" onchange="" type="number">
+                    </div>
                 </div>
             </form>
         </div>
         <div class="left-column">
-            <div class="entry">
-                <label for="add-ingredient">Add an ingredient</label>
-                <input id="add-ingredient" placeholder="Search ingredient..."></input>
-            </div>
-            <div class="entry">
-                <label for="filters">Filters</label>
-                <select id="filters">
-                    <option>Option 1</option>
-                </select>
+            <div class="entries">
+                <div class="entry">
+                    <label for="add-ingredient">Add an ingredient</label>
+                    <input id="add-ingredient" placeholder="Search for an ingredient..." title="Search for an ingredient...">
+                </div>
+                <div class="entry">
+                    <label for="filters">Filters</label>
+                    <button>Show/Hide</button>
+                    <fieldset id="filters">
+                        <input type="checkbox" id="option1" name="option1">
+                        <label for="option1">Option 1</label><br/>
+
+                        <input type="checkbox" id="option2" name="option1">
+                        <label for="option2">Option 2</label><br/>
+                    </fieldset>
+                </div>
             </div>
             <div id="ingredient-list">
                 <table>
@@ -97,7 +126,85 @@
                     </template>
                 </tbody>
             </table>
+            <p>Total mass: <span id="total-mass" name="total mass"></span></p>
         </div>
+        <div class="footer">
+            <button class="left-button">Back to My Dishes</button>
+            <button class="right-button">See nutrient information</button>
+        </div>
+    </section>
+    <section id="nutrition">
+        <h2 id="dish-title">Dish Title</h2>
+        <div class="legend">
+            <div class="colour-coding">
+                <strong>Nutrition Colour Code:</strong><br>
+                <span class="green">Green</span> - a healthier choice, <span class="amber">Amber</span> - can be eaten most of the time, <span class="red">Red</span> - eat less often and in small amounts
+            </div>
+            <div class="ref-intake">
+                <strong>RI:</strong><br>
+                Amount of a nutrient you should consume in a day
+            </div>
+        </div>
+        <table>
+            <tr>
+                <th colspan="2">Nutrient</th>
+                <th>Per <span id="portion-mass" name="portion-mass">g portion</span></th>
+                <th>Per 100g</th>
+                <th title="Reference Intake: amount of a nutrient you should consume in a day">RI</th>
+                <th title="Nutrition colour coding: tells you if the food has high, medium or low amounts of fat, saturated fat, sugars and salt.">Colour code</th>
+            </tr>
+            <tr id="energy">
+                <td colspan="2">Energy</td>
+                <td>kcal</td>
+                <td>kcal</td>
+                <td>%</td>
+                <td></td>
+            </tr>
+            <tr id="protein">
+                <td colspan="2">Protein</td>
+                <td>g</td>
+                <td>g</td>
+                <td>%</td>
+                <td></td>
+            </tr>
+            <tr id="fat">
+                <td colspan="2">Fat</td>
+                <td>g</td>
+                <td>g</td>
+                <td>%</td>
+                <td></td>
+            </tr>
+            <tr id="sat-fat">
+                <td>-</td>
+                <td>Saturated Fat</td>
+                <td>g</td>
+                <td>g</td>
+                <td>%</td>
+                <td></td>
+            </tr>
+            <tr id="carb">
+                <td colspan="2">Carbohydrate</td>
+                <td>g</td>
+                <td>g</td>
+                <td>%</td>
+                <td></td>
+            </tr>
+            <tr id="sugars">
+                <td>-</td>
+                <td>Sugars</td>
+                <td>g</td>
+                <td>g</td>
+                <td>%</td>
+                <td></td>
+            </tr>
+            <tr id="sodium">
+                <td colspan="2">Sodium</td>
+                <td>g</td>
+                <td>g</td>
+                <td>%</td>
+                <td></td>
+            </tr>
+        </table>
     </section>
 </main>
 </body>
