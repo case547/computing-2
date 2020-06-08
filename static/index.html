@@ -27,7 +27,7 @@
             </div>
         </div>
     </section>
-    <section id="my-dishes">
+    <section id="my-dishes" hidden>
         <div class="content" id="mydishes-grid">
             <h2 class="h2-left" id="mydishes-head">My dishes</h2>
             <button id="create-mydish">Create new dish</button>
@@ -64,94 +64,91 @@
                     </tbody>
                 </table>
             </div>
-            <div class="footer">
-                <button class="left-button">Homepage</button>
-            </div>
         </div>
     </section>
-    <section id="dish-editor">
+    <section id="dish-editor" hidden>
         <div class="content">
             <h2 id="dish-title">Dish Title</h2>
             <div class="dish-settings">
                 <form action="/" class="edit-dish" id="dish-form" method="post" onsubmit="">
-                    <div class="entries">
-                        <div class="entry">
-                            <label for="dish-name">Dish:</label>
-                            <input id="dish-name" name="dish-name" placeholder="Name your dish and press Enter" title="Enter dish and press Enter" type="text" value="">
+                    <div class="entries" id="dish-settings">
+                        <div class="entry" id="namer">
+                            <label for="dish-namer">Dish:</label>
+                            <input id="dish-namer" name="dish-namer" placeholder="Name your dish and press Enter" title="Name your dish and press Enter" type="text" value="">
                         </div>
-                        <div class="entry">
-                            <label for="portions">Portions:</label>
-                            <input id="portions" name="portions" onchange="" type="number">
+                        <div class="entry" id="portioner">
+                            <label for="dish-portioner">Portions:</label>
+                            <input id="dish-portioner" name="dish-portioner" onchange="" type="number">
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="left-column">
-                <div class="entries">
-                    <div class="entry">
-                        <label for="add-ingredient">Add an ingredient</label>
-                        <input id="add-ingredient" placeholder="Search for an ingredient..." title="Search for an ingredient...">
-                    </div>
-                    <div class="entry">
-                        <label for="filters">Filters</label>
-                        <button>Show/Hide</button>
-                        <fieldset id="filters">
-                            <input type="checkbox" id="option1" name="option1">
-                            <label for="option1">Option 1</label><br/>
+            <div class="cols">
+                <div class="left-col">
+                    <div class="entries">
+                        <div class="entry">
+                            <label for="add-ingredient">Add an ingredient</label>
+                            <input id="add-ingredient" placeholder="Search for an ingredient..." title="Search for an ingredient...">
+                        </div>
+                        <div class="entry">
+                            <label for="filter-set">Filters</label>
+                            <button id="filter-toggle">Show/Hide</button>
+                            <fieldset id="filter-set" hidden>
+                                <input type="checkbox" id="option1" name="option1">
+                                <label for="option1">Option 1</label><br/>
 
-                            <input type="checkbox" id="option2" name="option1">
-                            <label for="option2">Option 2</label><br/>
-                        </fieldset>
+                                <input type="checkbox" id="option2" name="option1">
+                                <label for="option2">Option 2</label><br/>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div id="ingredient-list">
+                        <table>
+                            <tbody>
+                                <tr>Food 1</tr>
+                                <tr>Food 2</tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div id="ingredient-list">
+                <div class="right-col">
                     <table>
+                        <thead>
+                            <tr>
+                                <th>Added Ingredients</th>
+                                <th style="width: 100px">Mass [g]</th>
+                                <th></th>
+                            </tr>
+                        </thead>
                         <tbody>
-                            <tr>Row</tr>
+                            <template id="added-ingredient">
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Mass</td>
+                                    <td>
+                                        <button class="delete">X</button>
+                                    </td>
+                                </tr>
+                            </template>
                         </tbody>
                     </table>
+                    <p>Total mass: <span id="total-mass" name="total mass"></span></p>
                 </div>
             </div>
-            <div class="right-column">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Added Ingredients</th>
-                            <th style="width: 100px">Mass [g]</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <template id="added-ingredient">
-                            <tr>
-                                <td>Name</td>
-                                <td>Mass</td>
-                                <td>
-                                    <button class="delete">X</button>
-                                </td>
-                            </tr>
-                        </template>
-                    </tbody>
-                </table>
-                <p>Total mass: <span id="total-mass" name="total mass"></span></p>
-            </div>
-            <div class="footer">
-                <button class="left-button">Back to My Dishes</button>
-                <button class="right-button">See nutrient information</button>
-            </div>
         </div>
+        
     </section>
-    <section id="nutrition">
+    <section id="nutrition" hidden>
         <div class="content">
             <h2 id="dish-title">Dish Title</h2>
             <div class="legend">
                 <div class="colour-coding">
-                    <strong>Nutrition Colour Code:</strong><br>
-                    <span class="green">Green</span> - a healthier choice, <span class="amber">Amber</span> - can be eaten most of the time, <span class="red">Red</span> - eat less often and in small amounts
+                    <strong>Nutrition Colour Code:</strong>
+                    <p><span class="green">Green</span> - a healthier choice, <span class="amber">Amber</span> - can be eaten most of the time, <span class="red">Red</span> - eat less often and in small amounts </p>
                 </div>
                 <div class="ref-intake">
-                    <strong>RI:</strong><br>
-                    Amount of a nutrient you should consume in a day
+                    <strong>RI:</strong>
+                    <p>Amount of a nutrient you should consume in one day</p>
                 </div>
             </div>
             <table>
@@ -160,7 +157,7 @@
                     <th>Per <span id="portion-mass" name="portion-mass">g portion</span></th>
                     <th>Per 100g</th>
                     <th title="Reference Intake: amount of a nutrient you should consume in a day">RI</th>
-                    <th title="Nutrition colour coding: tells you if the food has high, medium or low amounts of fat, saturated fat, sugars and salt.">Colour code</th>
+                    <th title="Nutrition colour coding: tells you if the food has high, medium or low amounts of fat, saturated fat, sugars and salt."><img src="./images/traffic-light.png"></th>
                 </tr>
                 <tr id="energy">
                     <td colspan="2">Energy</td>
@@ -215,7 +212,25 @@
                 </tr>
             </table>
         </div>
+        
     </section>
 </main>
+
+<footer>
+    <div class="credits" id="credits">
+        Firstname Lastname | Imperial College London - Design Engineering Y1 - Computing 2: Applications
+    </div>
+    <div class="foot" id="mydishes-foot" hidden>
+        <button class="left-button" id="home">Homepage</button>
+        <button class="right-button" id="edit" hidden>Edit dish</button>
+    </div>
+    <div class="foot" id="editor-foot" hidden>
+        <button class="left-button" id="back-dishes">Back to My Dishes</button>
+        <button class="right-button" id="see-info">See nutrient information</button>
+    </div>
+    <div class="foot" id="nutrition-foot" hidden>
+        <button class="left-button" id="back-ingredients">Back to Ingredients</button>
+    </div>
+</footer>
 </body>
 </html>
