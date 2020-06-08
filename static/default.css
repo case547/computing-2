@@ -1,0 +1,228 @@
+:root {
+    --banner-height: 135px;
+    --border-radius: 2.5px;
+    --foot-margin: 2px;
+    --h1-margin: 15.2px;
+    --menu-button-height: 80px;
+    --menu-button-width: 260px;
+    --message-padding: 0.2em;
+
+    --transition-duration: 0.167s;
+
+    --accent0: #804;
+    --accent1: #d07;
+    --accent2: #f08;
+    --accent3: #e48;
+    --base0: #232629;
+    --base1: #2d3136;
+    --base2: #31363b;
+    --base3: #4d5057;
+    --base4: #616569;
+    --base5: #eff0f1;
+    --base6: ;
+    --secondary0: #345e75;
+    --secondary1: #3daee9;
+
+    --card-bg: var(--base1);
+    --card-fg: var(--base5);
+    --cell-bg: var(--base2);
+    --input-active: var(--secondary1);
+    --input-bg: var(--base0);
+    --input-fg: var(--base5);
+    --input-border: var(--base4);
+    --menu-bg: var(--base6);
+    --menu-border: var(--base6);
+    --menu-fg: var(--base6);
+    --table-border: var(--base5);
+    --topbar-bg: var(--accent2);
+}
+
+body {
+    font-family: "Roboto", sans-serif;
+    font-size: 16pt;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+}
+
+header {
+    background-color: var(--topbar-bg);
+    height: var(--banner-height);
+    padding-left: calc(var(--banner-height) / 3 );
+    position: absolute;
+    text-align: left;
+    width: 100%;
+}
+
+h1 {
+    font-size: 32pt;
+    height: 60px;
+    margin: calc(calc(var(--banner-height) - 60px) / 2) 0;
+}
+
+h2 {
+    font-size: 2em;
+}
+
+input {
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: var(--border-radius);
+    box-sizing: border-box;
+    color: var(--input-fg);
+    font-size: inherit;
+    outline: none;
+    padding: var(--message-padding);
+    transition-duration: var(--transition-duration);
+    transition-property: border;
+}
+
+input:focus, input:hover {
+    border-color: var(--input-active);
+}
+
+
+input[type=text] {
+    font-size: inherit;
+    height: 30px;
+    width: 50%;
+}
+
+main {
+    background-color: var(--card-bg);
+    color: var(--card-fg);
+    height: calc(100% - var(--banner-height));
+    position: absolute;
+    top: var(--banner-height);
+    width: 100%;
+}
+
+section {
+    display: flex;
+    justify-content: center;
+}
+
+table {
+    border-collapse: separate;
+    border-color: var(--table-border);
+    border-spacing: 4px;
+    box-sizing: border-box;
+    display: table;
+}
+
+tbody {
+    border-color: inherit;
+    display: table-row-group;
+    vertical-align: middle;
+}
+
+td {
+    background: var(--cell-bg);
+    display: table-cell;
+    padding: 8px;
+    text-align: left;
+    vertical-align: inherit;
+}
+
+th {
+    display: table-cell;
+    font-weight: bold;
+    padding: 8px;
+    text-align: left;
+    vertical-align: inherit;
+    white-space: nowrap;
+}
+
+thead {
+    display: table-header-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+
+.content {
+    width: 70%;
+}
+
+.footer {
+    bottom: var(--foot-margin);
+    position: absolute;
+}
+
+.h2-centred {
+    text-align: center;
+}
+
+.h2-left {
+    margin-bottom: 0;
+}
+
+.menu {
+    display: flex;
+    justify-content: space-around;
+}
+
+.menu button {
+    background: var(--menu-bg);
+    border: 1px solid var(--menu-border);
+    border-radius: var(--border-radius);
+    box-sizing: border-box;
+    color: var(--menu-fg);
+    font-family: inherit;
+    font-size: 24px;
+    height: var(--menu-button-height);
+    outline: none;
+    transition-duration: var(--transition-duration);
+    transition-property: border;
+    width: var(--menu-button-width);
+}
+
+.menu button:focus, .menu button:hover {
+    border-color: var(--input-active);
+}
+
+.menu button:active {
+    background-color: var(--input-active);
+    border: none;
+}
+
+.menu button::-moz-focus-inner {
+    border: none;
+}
+
+#mydishes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+}
+
+#mydishes-head {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+#create-mydish {
+    align-self: end;
+    grid-column: 2;
+    grid-row: 1;
+    height: 35px;
+    justify-self: right;
+    width: 140px;
+}
+
+#dish-search {
+    grid-column: 1/3;
+    grid-row: 2;
+}
+
+#dish-list {
+    grid-column: 1/3;
+    grid-row: 3;
+}
