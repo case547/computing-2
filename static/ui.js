@@ -4,6 +4,10 @@ ui.init = function () {
     const el = (id) => document.getElementById(id);
     const cloneTemplate = (id) => document.importNode(el(id).content, true);
 
+    el("app-head").onclick = function () {
+
+    };
+
     // Landing page buttons
     el("create-newdish").onclick = function () {
         el("landing").hidden = true;
@@ -21,6 +25,20 @@ ui.init = function () {
 
     };
 
+    // My Dishes buttons
+    el("home").onclick = function () {
+        el("my-dishes").hidden = true;
+        el("mydishes-foot").hidden = true;
+        el("landing").hidden = false;
+        el("credits").hidden = false;
+    };
+    el("create-mydish").onclick = function () {
+        el("my-dishes").hidden = true;
+        el("mydishes-foot").hidden = true;
+        el("dish-editor").hidden = false;
+        el("editor-foot").hidden = false;
+    };
+
     // Dish editor buttons
     el("filter-toggle").onclick = function () {
         let field = el("filter-set");
@@ -29,14 +47,22 @@ ui.init = function () {
     el("back-dishes").onclick = function () {
         el("dish-editor").hidden = true;
         el("editor-foot").hidden = true;
-        el("landing").hidden = false;
-        el("credits").hidden = false;
+        el("my-dishes").hidden = false;
+        el("mydishes-foot").hidden = false;
     };
     el("see-info").onclick = function () {
         el("dish-editor").hidden = true;
         el("editor-foot").hidden = true;
         el("nutrition").hidden = false;
         el("nutrition-foot").hidden = false;
+    };
+
+    // NI buttons
+    el("back-ingredients").onclick = function () {
+        el("nutrition").hidden = true;
+        el("nutrition-foot").hidden = true;
+        el("dish-editor").hidden = false;
+        el("editor-foot").hidden = false;
     };
 };
 

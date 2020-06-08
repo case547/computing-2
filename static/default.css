@@ -1,6 +1,9 @@
 :root {
     --banner-height: 135px;
     --border-radius: 5px;
+    --cell-pad: 8px;
+    --content-button-height: 35px;
+    --content-button-width: 140px;
     --foot-button-height: 40px;
     --foot-button-width: 260px;
     --footer-height: 80px;
@@ -12,10 +15,10 @@
 
     --transition-duration: 0.167s;
 
-    --accent0: #804;
-    --accent1: #d07;
-    --accent2: #50e3c2;;
-    --accent3: #e48;
+    --accent0: #50e3c2;
+    --accent1: #ed5f41;
+    --accent2: #b5e37c;
+    --accent3: #ed585d;
     --base0: #232629;
     --base1: #2d3136;
     --base2: #31363b;
@@ -25,7 +28,8 @@
     --secondary0: #345e75;
     --secondary1: #3daee9;
 
-    --button-border: var(--accent2);
+    --amber-code: var(--accent1);
+    --button-border: var(--accent0);
     --card-bg: var(--base1);
     --card-fg: var(--base5);
     --cell-bg: var(--base2);
@@ -33,14 +37,16 @@
     --footer-bg: var(--base0);
     --foot-bg: var(--base2);
     --foot-fg: var(--base5);
+    --green-code: var(--accent2);
     --input-active: var(--secondary1);
     --input-bg: var(--base0);
     --input-fg: var(--base5);
     --input-border: var(--base4);
     --menu-bg: var(--base2);
     --menu-fg: var(--base5);
-    --table-border: var(--base4);
-    --topbar-bg: var(--accent2);
+    --red-code: var(--accent3);
+    --table-border: var(--base3);
+    --topbar-bg: var(--accent0);
 }
 
 body {
@@ -131,15 +137,16 @@ tbody {
 td {
     background: var(--cell-bg);
     display: table-cell;
-    padding: 8px;
+    padding: var(--cell-pad);
     text-align: left;
     vertical-align: inherit;
+    white-space: nowrap;
 }
 
 th {
     display: table-cell;
     font-weight: bold;
-    padding: 8px;
+    padding: var(--cell-pad);
     text-align: center;
     vertical-align: inherit;
     white-space: nowrap;
@@ -162,12 +169,21 @@ tr {
     border-color: inherit;
 }
 
-.colour-coding {
-    width: 60%;
+.active-button:active {
+    background-color: var(--input-active);
+    border: none;
 }
 
-.cols {
-    overflow: auto;
+.active-button:focus, .active-button:hover {
+    border-color: var(--input-active);
+}
+
+.active-button::-moz-focus-inner {
+    border: none;
+}
+
+.amber {
+    color: var(--amber-code);
 }
 
 .content {
@@ -184,9 +200,6 @@ tr {
 }
 
 .foot {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 10px;
     width: 70%;
 }
 
@@ -205,18 +218,15 @@ tr {
     width: var(--foot-button-width);
 }
 
-.foot button:active, .menu button:active {
-    background-color: var(--input-active);
-    border: none;
+.green {
+    color: var(--green-code);
 }
 
-.foot button:focus, .foot button:hover, 
-.menu button:focus, .menu button:hover {
-    border-color: var(--input-active);
-}
-
-.foot button::-moz-focus-inner, .menu button::-moz-focus-inner {
-    border: none;
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px 2%;
+    overflow: auto;
 }
 
 .h2-centred {
@@ -224,12 +234,12 @@ tr {
 }
 
 .h2-left {
-    margin-bottom: 0;
+    margin-bottom: 18px;
 }
 
 .left-col {
-    float: left;
-    width: 49%;
+    grid-column: 1;
+    grid-row: 1;
 }
 
 .left-button {
@@ -238,9 +248,9 @@ tr {
     justify-self: left;
 }
 
-.legend {
-    display: flex;
-    justify-content: space-between;
+.legend p {
+    font-size: 14pt;
+    margin-top: 5px;
 }
 
 .menu {
@@ -263,8 +273,8 @@ tr {
     width: var(--menu-button-width);
 }
 
-.ref-intake {
-    width: 35%;
+.red {
+    color: var(--red-code);
 }
 
 .right-button {
@@ -274,8 +284,8 @@ tr {
 }
 
 .right-col {
-    float: right;
-    width: 49%;
+    grid-column: 2;
+    grid-row: 1;
 }
 
 #add-ingredient {
@@ -284,16 +294,23 @@ tr {
 
 #create-mydish {
     align-self: end;
-    grid-column: 2;
-    grid-row: 1;
-    height: 35px;
+    background: var(--menu-bg);
+    border: 1px solid var(--button-border);
+    border-radius: var(--border-radius);
+    box-sizing: border-box;
+    color: var(--menu-fg);
+    font-family: inherit;
+    height: var(--content-button-height);
     justify-self: right;
-    width: 140px;
+    outline: none;
+    transition-duration: var(--transition-duration);
+    transition-property: border;
+    width: var(--content-button-width);
 }
 
 #dish-list {
     grid-column: 1/3;
-    grid-row: 3;
+    grid-row: 2;
 }
 
 #dish-namer {
@@ -304,40 +321,8 @@ tr {
     width: 3em;
 }
 
-#dish-search {
-    grid-column: 1/3;
-    grid-row: 2;
-}
-
-#dish-settings {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 10px;
-}
-
 #ingredient-list {
     border: 1px solid var(--table-border);
-}
-
-#mydishes-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 10px;
-}
-
-#mydishes-head {
-    grid-column: 1;
-    grid-row: 1;
-}
-
-#namer {
-    grid-column: 1;
-    grid-row: 1;
-}
-
-#portioner {
-    grid-column: 2;
-    grid-row: 1;
 }
 
 [hidden] {
