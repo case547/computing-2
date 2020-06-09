@@ -1,9 +1,9 @@
 const ui = Object.create(null);
 
-ui.init = function () {
-    const el = (id) => document.getElementById(id);
-    const cloneTemplate = (id) => document.importNode(el(id).content, true);
+const el = (id) => document.getElementById(id);
+const cloneTemplate = (id) => document.importNode(el(id).content, true);
 
+ui.init = function () {
     el("app-head").onclick = function () {
 
     };
