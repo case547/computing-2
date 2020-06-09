@@ -293,7 +293,6 @@ tr {
 }
 
 #create-mydish {
-    align-self: end;
     background: var(--menu-bg);
     border: 1px solid var(--button-border);
     border-radius: var(--border-radius);
@@ -301,7 +300,6 @@ tr {
     color: var(--menu-fg);
     font-family: inherit;
     height: var(--content-button-height);
-    justify-self: right;
     outline: none;
     transition-duration: var(--transition-duration);
     transition-property: border;
@@ -323,6 +321,10 @@ tr {
 
 #ingredient-list {
     border: 1px solid var(--table-border);
+}
+
+#filter-toggle {
+    vertical-align: text-top;
 }
 
 [hidden] {
