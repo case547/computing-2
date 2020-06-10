@@ -105,13 +105,12 @@
                         </div>
                     </div>
                     <div id="ingredient-list">
-                        <table>
-                            <tbody>
-                                <tr>Food 1</tr>
-                                <tr>Food 2</tr>
-                            </tbody>
-                        </table>
+                        <ul>
+                            <li>Food 1</li>
+                            <li>Food 2</li>
+                        </ul>
                     </div>
+                    <button id="add-food">Add selected ingredient</button>
                 </div>
                 <div class="right-col">
                     <table>
@@ -122,7 +121,7 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="ingredient-table" name="ingredient-table">
                             <template id="added-ingredient">
                                 <tr>
                                     <td>Name</td>
@@ -134,7 +133,7 @@
                             </template>
                         </tbody>
                     </table>
-                    <p>Total mass: <span id="total-mass" name="total mass"></span></p>
+                    <p>Total mass: <span id="total-mass" name="total-mass"></span></p>
                 </div>
             </div>
         </div>

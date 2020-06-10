@@ -1,3 +1,5 @@
+import F from "./functional.js";
+
 const ui = Object.create(null);
 
 const el = (id) => document.getElementById(id);
@@ -8,7 +10,7 @@ ui.init = function () {
 
     };
 
-    // Landing page buttons
+    // Landing page
     el("create-newdish").onclick = function () {
         el("landing").hidden = true;
         el("credits").hidden = true;
@@ -25,7 +27,7 @@ ui.init = function () {
 
     };
 
-    // My Dishes buttons
+    // My Dishes
     el("home").onclick = function () {
         el("my-dishes").hidden = true;
         el("mydishes-foot").hidden = true;
@@ -38,6 +40,9 @@ ui.init = function () {
         el("dish-editor").hidden = false;
         el("editor-foot").hidden = false;
     };
+
+
+    // DISH EDITOR SECTION
 
     // Dish editor buttons
     el("filter-toggle").onclick = function () {
@@ -55,6 +60,30 @@ ui.init = function () {
         el("editor-foot").hidden = true;
         el("nutrition").hidden = false;
         el("nutrition-foot").hidden = false;
+    };
+
+
+    // Setting total mass value
+
+    const totalMass = el("total-mass");
+    const addFood = el("add-food");
+
+    addFood.onclick = function () {
+        sorter(function (result) {
+            totalMass.textContent = result;
+        });
+    };
+
+    const sorter = function (callback) {
+        let table = document.querySelector("[name=ingredient-table]");
+        let rows = table.querySelectorAll("tr");
+
+        let tds = Array.from(rows, (row) => row.cells[3]);
+
+        const reducer = (a, b) => a + b;
+        setTimeout(function () {
+            callback(tds.reduce(reducer, 0));
+        }, 0);
     };
 
     // NI buttons
