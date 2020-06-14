@@ -3,7 +3,7 @@ import Ajax from "./ajax.js";
 const ui = Object.create(null);
 
 const el = (id) => document.getElementById(id);
-const cloneTemplate = (id) => document.importNode(el(id).content, true);
+//const cloneTemplate = (id) => document.importNode(el(id).content, true);
 
 ui.init = function () {
     el("app-head").onclick = function () {
