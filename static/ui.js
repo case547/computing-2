@@ -1,4 +1,4 @@
-import F from "./functional.js";
+import Ajax from "./ajax.js";
 
 const ui = Object.create(null);
 
@@ -9,6 +9,8 @@ ui.init = function () {
     el("app-head").onclick = function () {
 
     };
+
+    // BUTTONS
 
     // Landing page
     el("create-newdish").onclick = function () {
@@ -41,9 +43,6 @@ ui.init = function () {
         el("editor-foot").hidden = false;
     };
 
-
-    // DISH EDITOR SECTION
-
     // Dish editor buttons
     el("filter-toggle").onclick = function () {
         let field = el("filter-set");
@@ -62,9 +61,18 @@ ui.init = function () {
         el("nutrition-foot").hidden = false;
     };
 
+    // Nutrient Info
+    el("back-ingredients").onclick = function () {
+        el("nutrition").hidden = true;
+        el("nutrition-foot").hidden = true;
+        el("dish-editor").hidden = false;
+        el("editor-foot").hidden = false;
+    };
+
+
+    // CALC CENTRAL
 
     // Setting total mass value
-
     const totalMass = el("total-mass");
     const addFood = el("add-food");
 
@@ -82,16 +90,36 @@ ui.init = function () {
 
         const reducer = (a, b) => a + b;
         setTimeout(function () {
-            callback(tds.reduce(reducer, 0));
+            callback(tds.reduce(reducer));
         }, 0);
     };
 
-    // NI buttons
-    el("back-ingredients").onclick = function () {
-        el("nutrition").hidden = true;
-        el("nutrition-foot").hidden = true;
-        el("dish-editor").hidden = false;
-        el("editor-foot").hidden = false;
+
+    // SERVER SCHTUFF
+
+    // Dish titler
+    const editorTitle = el("editor-title");
+    const nutriTitle = el("nutri-title");
+    const nameInput = el("dish-namer");
+
+    nameInput.onkeydown = function (event) {
+        if (event.key !== "Enter") {
+            return;
+        }
+
+        const req = {
+            "output": nameInput.value
+        };
+
+        const resp = Ajax.query(req);
+        const respDishName = resp.then((resp) => resp.output);
+
+        respDishName.then(function (name) {
+            editorTitle.textContent = name;
+            nutriTitle.textContent = name;
+        });
+
+        event.preventDefault();
     };
 };
 

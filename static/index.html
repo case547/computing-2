@@ -70,20 +70,18 @@
     </section>
     <section id="dish-editor" hidden>
         <div class="content">
-            <h2 id="dish-title" class="h2-left">Dish Title</h2>
+            <h2 id="editor-title" class="h2-left"></h2>
             <div class="dish-settings">
-                <form action="/" class="edit-dish" id="dish-form" method="post" onsubmit="">
-                    <div class="entries grid">
-                        <div class="entry left-col" id="namer">
-                            <label for="dish-namer">Dish:</label>
-                            <input id="dish-namer" name="dish-namer" placeholder="Name your dish and press Enter" title="Name your dish and press Enter" type="text" value="">
-                        </div>
-                        <div class="entry right-col" id="portioner">
-                            <label for="dish-portioner">Portions:</label>
-                            <input id="dish-portioner" name="dish-portioner" onchange="" type="number">
-                        </div>
+                <div class="entries grid">
+                    <div class="entry left-col" id="namer">
+                        <label for="dish-namer">Dish:</label>
+                        <input id="dish-namer" name="dish-namer" placeholder="Name your dish and press Enter" title="Name your dish and press Enter" type="text" value="">
                     </div>
-                </form>
+                    <div class="entry right-col" id="portioner">
+                        <label for="dish-portioner">Portions:</label>
+                        <input id="dish-portioner" name="dish-portioner" onchange="" type="number">
+                    </div>
+                </div>
             </div>
             <div class="grid">
                 <div class="left-col">
@@ -141,7 +139,7 @@
     </section>
     <section id="nutrition" hidden>
         <div class="content">
-            <h2 id="dish-title" class="h2-left">Dish Title</h2>
+            <h2 id="nutri-title" class="h2-left"></h2>
             <div class="grid">
                 <div class="legend">
                     <div class="colour-coding">

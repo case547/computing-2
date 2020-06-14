@@ -1,7 +1,7 @@
 const handler = function (obj) {
-    const reversed = obj.message.split("").reverse().join("");
+    const dishName = obj.output;
     return {
-        "message": reversed
+        "output": dishName
     };
 };
 
