@@ -148,8 +148,7 @@ ui.init = function () {
 
             const catSelect = el("category-select");
             const options = [];
-            cats.forEach(function (c, i, j) {
-                j = 100
+            cats.forEach(function (c, i) {
                 const catTemplate = cloneTemplate("category-option");
                 const catName = catTemplate.querySelector("[name=food-cat]");
                 options.push(catName);
