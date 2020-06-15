@@ -33,7 +33,7 @@
             <div class="grid">
                 <div class="left-col" id="dish-search">
                     <label for="dish-searchbox"></label>
-                    <input id="dish-searchbox" name="dish-searchbox" placeholder="Find a dish" title="Find a dish" type="text">
+                    <input id="dish-searchbox" name="dish-searchbox" placeholder="Find a dish" title="Find a dish" type="search">
                 </div>
                 <button class="active-button right-button" id="create-mydish">Create new dish</button>
                 <div id="dish-list">    
@@ -87,22 +87,31 @@
                 <div class="left-col">
                     <div class="entries">
                         <div class="entry">
-                            <label for="add-ingredient">Add an ingredient</label>
-                            <input id="add-ingredient" placeholder="Search for an ingredient..." title="Search for an ingredient...">
+                            <label for="category-select">Choose an ingredient category:</label>
+                            <select name="categories" id="category-select">
+                                <option value="" selected>--Please choose an option--</option>
+                                <template id="category-option">
+                                    <option name="food-cat" value=""></option>
+                                </template>
+                            </select>
                         </div>
                         <div class="entry">
                             <label for="filter-set">Filters</label>
                             <button id="filter-toggle">Show/Hide</button>
                             <fieldset id="filter-set" hidden>
                                 <input type="checkbox" id="option1" name="option1">
-                                <label for="option1">Option 1</label><br/>
-
+                                <label for="option1">Option 1</label>
+                                <br/>
                                 <input type="checkbox" id="option2" name="option1">
                                 <label for="option2">Option 2</label><br/>
                             </fieldset>
                         </div>
                     </div>
                     <div id="ingredient-list">
+                        <div class="entry">
+                            <!-- <label for="add-ingredient">Add an ingredient</label> -->
+                            <input id="add-ingredient" placeholder="Narrow down your search..." title="Narrow down your search..." type="search">
+                        </div>
                         <ul>
                             <li>Food 1</li>
                             <li>Food 2</li>

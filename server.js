@@ -1,6 +1,5 @@
 import handler from "./handler.js";
 import express from "express";
-//import sqlite3 from "sqlite3";
 
 const port = 8080;
 const app = express();

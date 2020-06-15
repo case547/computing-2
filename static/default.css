@@ -106,6 +106,11 @@ input:focus, input:hover {
     border-color: var(--input-active);
 }
 
+input[type="search"] {
+    border-radius: 0px;
+}
+
+
 main {
     background-color: var(--card-bg);
     color: var(--card-fg);
@@ -321,6 +326,7 @@ tr {
 
 #ingredient-list {
     border: 1px solid var(--table-border);
+    padding: 10px;
 }
 
 #filter-toggle {

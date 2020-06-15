@@ -44,9 +44,14 @@ handlers.nameDish = function (obj) {
     });
 };
 
+handlers.getCategories = function (obj) {
+    const query = ("SELECT category FROM categories");
+    return queryPromise(query, obj.category);
+};
+
 // handlers.listFoods = function (obj) {
 //     const query = (
-        
+
 //     );
 // }
 

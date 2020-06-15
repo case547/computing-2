@@ -3,12 +3,12 @@ import Ajax from "./ajax.js";
 const ui = Object.create(null);
 
 const el = (id) => document.getElementById(id);
-//const cloneTemplate = (id) => document.importNode(el(id).content, true);
+const cloneTemplate = (id) => document.importNode(el(id).content, true);
 
 ui.init = function () {
-    el("app-head").onclick = function () {
+    // el("app-head").onclick = function () {
 
-    };
+    // };
 
     // BUTTONS
 
@@ -18,6 +18,8 @@ ui.init = function () {
         el("credits").hidden = true;
         el("dish-editor").hidden = false;
         el("editor-foot").hidden = false;
+
+        getCategories();
     };
     el("view").onclick = function () {
         el("landing").hidden = true;
@@ -41,11 +43,13 @@ ui.init = function () {
         el("mydishes-foot").hidden = true;
         el("dish-editor").hidden = false;
         el("editor-foot").hidden = false;
+
+        getCategories();
     };
 
-    // Dish editor buttons
+    // Dish editor
     el("filter-toggle").onclick = function () {
-        let field = el("filter-set");
+        const field = el("filter-set");
         field.toggleAttribute("hidden");
     };
     el("back-dishes").onclick = function () {
@@ -108,8 +112,12 @@ ui.init = function () {
         }
 
         const req = {
+            "type": "nameDish",
             "output": nameInput.value
         };
+
+        const reqString = JSON.stringify(req);
+        console.log(reqString);
 
         const resp = Ajax.query(req);
         const respDishName = resp.then((resp) => resp.output);
@@ -117,10 +125,62 @@ ui.init = function () {
         respDishName.then(function (name) {
             editorTitle.textContent = name;
             nutriTitle.textContent = name;
+            nameInput.setAttribute("value", name);
         });
 
         event.preventDefault();
     };
+
+
+    // DEATH BY DATABASE
+
+    // Generating options for food categories
+    const getCategories = function () {
+        const req = {
+            "type": "getCategories"
+        };
+
+        const resp = Ajax.query(req);
+
+        resp.then(function (objs) {
+            const vals = objs.map((obj) => Object.values(obj));
+            const cats = vals.flat();
+
+            const catSelect = el("category-select");
+            const options = [];
+            cats.forEach(function (c, i, j) {
+                j = 100
+                const catTemplate = cloneTemplate("category-option");
+                const catName = catTemplate.querySelector("[name=food-cat]");
+                options.push(catName);
+                catName.textContent = c;
+                catSelect.appendChild(catTemplate);
+
+                catName.onclick = function () {
+                    options.forEach(function (cn) {
+                        cn.setAttribute("aria-selected", false);
+                    });
+                    catName.setAttribute("aria-selected", true);
+
+                    searchResults();
+                };
+                if (i === 0) {
+                    catName.onclick();
+                }
+
+                catName.onkeydown = function (event) {
+                    if (event.key === "Enter") {
+                        catName.click();
+                    }
+                };
+            });
+        });
+    };
+
+    // Creating table in ingredient search
+    // function searchResults (resp) {
+    //     return;
+    // };
 };
 
 export default Object.freeze(ui);
