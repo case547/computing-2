@@ -1,3 +1,23 @@
+/**
+ * Hello Freddie, welcome to my UI code.
+ *
+ * I've ordered my functions with respect to the aspect of programming
+ * that they are related to, so they may seem a little out of order in
+ * terms of the sequence in which the user would encounter/use them.
+ *
+ * Within each main chunk, you will see the name of the block with the block
+ * name in capitals - as an example, // NAVIGATION BUTTONS. Additionally, each
+ * individual function will have its own annotation. I havealso commented on
+ * any weird stuff going on that may be difficult to understand at first glance.
+ *
+ * The chunks are as follows:
+ *
+ *  NAVIGATION BUTTONS: for flipping between the app sections, e.g. landing page, dish editor.
+ *  FABULOUS FRONT-END (excluing nav buttons): for misc client-side stuff, which include filtering search results, appending selected ingredients to the 'added ingredients' table.
+ *  SERVER SCHTUFF: code that interacts with making queries with handler.js, but are unrelated to the database.
+ *  DEATH BY DATABASE: death by database.
+ */
+
 import Ajax from "./ajax.js";
 
 const ui = Object.create(null);
@@ -8,6 +28,7 @@ const cloneTemplate = (id) => document.importNode(el(id).content, true);
 ui.init = function () {
     const root = document.documentElement.style;
 
+    // Clearing inputs
     const nameInput = el("dish-namer");
     const dishPortion = el("dish-portioner");
     const editorTitle = el("editor-title");
@@ -22,7 +43,7 @@ ui.init = function () {
     };
 
 
-    // BUTTONS
+    // NAVIGATION BUTTONS
 
     // Landing page
     el("create-newdish").onclick = function () {
@@ -85,8 +106,62 @@ ui.init = function () {
         el("nutrition-foot").hidden = false;
     };
 
+    // Nutrient Info
+    el("back-ingredients").onclick = function () {
+        el("nutrition").hidden = true;
+        el("nutrition-foot").hidden = true;
+        el("dish-editor").hidden = false;
+        el("editor-foot").hidden = false;
+    };
+
+
+    // FABULUOUS FRONT-END (excluding nav buttons)
+
+    // Filtering results based on searchbar input
+    const searchbar = el("add-ingredient");
+    const resultTable = el("result-table");
+    const resultRows = resultTable.rows;
+
+    searchbar.onkeyup = function () {
+        const input = searchbar.value.toLowerCase();
+
+        for (let row of resultRows) {
+            // Hide row if row's name cell doesn't have input value
+            if (!row.cells[1].innerHTML.toLowerCase().includes(input)) {
+                row.style.display="none";
+            } else { // Otherwise, maintain original display style
+                row.style.display="table-row";
+            }
+        };
+    };
+
+    // Adding selected ingredients
+    const addFood = el("add-button");
     const foodBody = el("ingredient-body");
-    // const foodRows = foodBody.rows;
+    addFood.onclick = function () {
+        const addedFoods = [];
+
+        for (let row of resultRows) {
+            // If checked, add content of name cell to the added foods arr
+            if (row.cells[0].firstElementChild.checked === true) {
+                addedFoods.push(row.lastElementChild.innerHTML);
+            }
+
+        }
+
+                addedFoods.forEach(function (f) {
+            const foodTemplate = cloneTemplate("added-ingredient");
+            const foodName = foodTemplate.querySelector("[name=food-name]");
+
+            // Set text content and add to template
+            foodName.textContent = f;
+            foodBody.appendChild(foodTemplate);
+        });
+    };
+
+    // Removing rows in the added ingredients table
+    const foodRows = foodBody.rows;
+
     /* const dels = [];
 
     const delRow = function (i) {
@@ -151,42 +226,46 @@ ui.init = function () {
         }
     } */
 
-    // Nutrient Info
-    el("back-ingredients").onclick = function () {
-        el("nutrition").hidden = true;
-        el("nutrition-foot").hidden = true;
-        el("dish-editor").hidden = false;
-        el("editor-foot").hidden = false;
-    };
 
-
-    // CALC CENTRAL
+    // CALCULATION CENTRAL
 
     // Setting total mass value
     const totalMass = el("total-mass");
     const refreshMass = el("mass-refresh");
 
     refreshMass.onclick = function () {
+        // When clicked, give button the class that rotates (by CSS animation)
         refreshMass.className = "col2 rotate-center";
 
+        // Remove rotating class after animation duration has elapsed (600ms)
         const revertClass = function () {
             refreshMass.className = "col2";
         };
 
         setTimeout(revertClass, 600);
 
-        sorter(function (result) {
+        // Call massAdder func to do its thing
+        massAdder(function (result) {
             totalMass.textContent = result;
         });
     };
 
-    const sorter = function (callback) {
+    const massAdder = function (callback) {
         let rows = foodBody.querySelectorAll("tr");
 
+        // Pass in the query selector and make array out of all inputted masses
         let tds = Array.from(
             rows, (row) => row.cells[1].firstChild.valueAsNumber
         );
 
+        // Edge case consideration: replace NaN masses with 0
+        tds.forEach(function (td) {
+            if (td === NaN) {
+                tds = 0;
+            }
+        });
+
+        // Pass reduce func to task queue in case user adds loads of stuff
         const reducer = (a, b) => a + b;
         setTimeout(function () {
             callback(tds.reduce(reducer, 0));
@@ -196,7 +275,7 @@ ui.init = function () {
 
     // SERVER SCHTUFF
 
-    // Titling the dish
+    // Giving the dish a title
     nameInput.onkeydown = function (event) {
         if (event.key !== "Enter" || nameInput.value === "") {
             return;
@@ -216,6 +295,7 @@ ui.init = function () {
             nameInput.setAttribute("value", name);
         });
 
+        // Reduce table div heights when dish title is generated
         root.setProperty("--result-div-height", "300px");
 
         event.preventDefault();
@@ -236,16 +316,21 @@ ui.init = function () {
             const vals = objs.map((obj) => Object.values(obj));
             const cats = vals.flat();
 
+            // Dynamically generating category options
             const catSelect = el("category-select");
             const options = [];
             cats.forEach(function (c, i) {
+                // Generic template stuff
                 const catTemplate = cloneTemplate("category-option");
                 const catName = catTemplate.querySelector("[name=food-cat]");
                 options.push(catName);
                 catName.textContent = c;
                 catSelect.appendChild(catTemplate);
+
+                // Give each category element value identical to text content
                 catName.setAttribute("value", c);
 
+                // Set clicked category as selected and others as not
                 catName.onclick = function () {
                     options.forEach(function (cn) {
                         cn.setAttribute("aria-selected", false);
@@ -257,6 +342,7 @@ ui.init = function () {
                     catName.onclick();
                 }
 
+                // For those weird mouse-less people
                 catName.onkeydown = function (event) {
                     if (event.key === "Enter") {
                         catName.click();
@@ -268,22 +354,22 @@ ui.init = function () {
         });
     };
 
-    // Creating table in the search result div
+    // Creating search result table
     const catSelect = el("category-select");
     const options = catSelect.getElementsByTagName("option");
-    const resultTable = el("result-table");
 
     const catFilter = function () {
         for (let opt of options) {
             opt.onclick = function () {
-                let i = resultTable.rows.length
-                // Remove existing rows
+
+                // Remove existing rows if a category was previously selected
+                let i = resultTable.rows.length;
                 while (true) {
                     if (i < 1) {
-                        break
+                        break;
                     }
                     resultTable.deleteRow(0);
-                    i -= 1
+                    i -= 1;
                 }
 
                 // Make a query for foods in selected category
@@ -295,6 +381,7 @@ ui.init = function () {
                 const resp = Ajax.query(req);
 
                 resp.then(function (objs) {
+                    // Convert response into a useable flat array
                     const vals = objs.map((obj) => Object.values(obj));
                     const results = vals.flat();
 
@@ -302,55 +389,47 @@ ui.init = function () {
                         const resultTemplate = cloneTemplate("result-row")
                         const resultName = resultTemplate.querySelector(
                             "[name=result]"
-                        )
+                        );
                         resultName.textContent = r;
                         resultTable.appendChild(resultTemplate);
 
+                        // Clicking name cell now equal to clicking checkbox
                         resultName.onclick = function () {
                             resultName.parentElement.cells[0]
                             .firstElementChild.click();
-                        }
+                        };
                     });
                 });
+            };
+        };
+    };
 
 
-            }
-        }
-    }
+    // Constructing query for nutrient data
+    // const nutriQuery = 
+    el("test").onclick = function () {
+        const ingredients = "("
 
-    // Filtering results based on searchbar input
-    const searchbar = el("add-ingredient")
-    const resultRows = resultTable.rows
+        for (let i = 0; i < foodRows.length; i++) {
+            const ingredientName = foodRows[i].cells[0].textContent
+            ingredients.concat("long_desc = '", ingredientName, "'")
 
-    searchbar.onkeyup = function () {
-        const input = searchbar.value.toLowerCase()
-
-        for (let row of resultRows) {
-            if (!row.cells[1].innerHTML.toLowerCase().includes(input)) {
-                row.style.display="none"
-            } else {
-                row.style.display="table-row"
-            }
-        }
-    }
-
-    // Adding selected ingredients
-    const addFood = el("add-button");
-    addFood.onclick = function () {
-        const addedFoods = []
-
-        for (let row of resultRows) {
-            if (row.cells[0].firstElementChild.checked === true) {
-                addedFoods.push(row.lastElementChild.innerHTML)
-            }
+            // If current row is the last one, close off the SQL query
+            if (i === foodRows.length - 1){
+                ingredients.concat(")")
+            } // Otherwise, continue appending foods
+            ingredients.concat(" OR ")
         }
 
-        addedFoods.forEach(function (f) {
-            const foodTemplate = cloneTemplate("added-ingredient")
-            const foodName = foodTemplate.querySelector("[name=food-name]")
+        const req = {
+            "type": "nutriTable",
+            "ingredients": ingredients,
+        }
 
-            foodName.textContent = f;
-            foodBody.appendChild(foodTemplate);
+        const resp = Ajax.query(req);
+
+        resp.then(function (objs) {
+            console.log(objs)
         })
     }
 };

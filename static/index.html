@@ -78,7 +78,7 @@
                 </div>
                 <div class="entry col2" id="portioner">
                     <label for="dish-portioner">Portions:</label>
-                    <input id="dish-portioner" name="dish-portioner" onchange="" type="number">
+                    <input id="dish-portioner" min="1" name="dish-portioner" type="number" value="1">
                 </div>
                 <div class="col3 entry" id="saver">
                     <button class="active-button content-button" id="save-edits">Save dish</button>
@@ -137,7 +137,7 @@
                                 <template id="added-ingredient">
                                     <tr>
                                         <td name="food-name">Name</td>
-                                        <td class="mass-cell"><input class="set-mass" title="Set ingredient mass" type="number"></td>
+                                        <td class="mass-cell"><input class="set-mass" min="0" title="Set ingredient mass" type="number" value="0"></td>
                                         <td><button class="delete" title="Delete Ingredient">🗑️</button></td>
                                     </tr>
                                 </template>
@@ -146,6 +146,7 @@
                         <p id="mass-p">
                             <span class="col1">Total mass: <span id="total-mass">0</span>g</span>
                             <img src="./images/refresh.png" class="col2" id="mass-refresh">
+                            <button id="test">Test</button>
                         </p>
                     </div>
                 </div>
