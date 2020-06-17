@@ -28,31 +28,50 @@ const actionPromise = function (query, ...queryParams) {
                 reject(err);
                 return;
             }
-            resolve(this.changes);
+            resolve(this.changes); // sorry Mr Crockford
         });
     });
 };
 
 const handler = function (obj) {
+    // handlers.[any] corresponding with value of "type" key in reqs in ui.js
     return Promise.resolve(handlers[obj.type](obj));
 };
 
 handlers.nameDish = function (obj) {
-    const dishName = obj.output;
+    const dishName = obj.output; // where output is a key
     return Promise.resolve({
         "output": dishName
     });
 };
 
-handlers.getCategories = function (obj) {
+handlers.fetchCategories = function (obj) {
     const query = ("SELECT category FROM categories");
+    return queryPromise(query);
+};
+
+handlers.catFilter = function (obj) {
+    const query = (
+        "SELECT foods.long_desc " +
+        "FROM foods LEFT JOIN categories " +
+        "ON foods.fkCategory = categories.pkCategories " +
+        "WHERE category = ?"
+    );
+
     return queryPromise(query, obj.category);
 };
 
-// handlers.listFoods = function (obj) {
-//     const query = (
+handlers.nutriTable = function (obj) {
+    const query = (
+        "SELECT foods.long_desc, nutrients.nutrient, " +
+        "nutrientData.nutri_val, nutrients.units " +
+        "FROM nutrientData " +
+        "INNER JOIN foods ON foods.pkFoods = nutrientData.fkFood " +
+        "INNER JOIN nutrients ON nutrients.pkNutrients = fkNutrient " +
+        "WHERE include = 1 AND ?"
+    );
 
-//     );
-// }
+    return queryPromise(query, obj.ingredients);
+};
 
 export default Object.freeze(handler);

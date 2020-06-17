@@ -12,6 +12,8 @@
     --menu-button-height: 80px;
     --menu-button-width: 260px;
     --message-padding: 0.2em;
+    --result-div-height: 375px;
+    --row-button-height: 40px;
 
     --transition-duration: 0.167s;
 
@@ -49,6 +51,15 @@
     --topbar-bg: var(--accent0);
 }
 
+@keyframes rotate-center {
+    0% {
+      transform: rotate(0);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
 body {
     font-family: "Roboto", sans-serif;
     font-size: 16pt;
@@ -80,9 +91,11 @@ header {
 }
 
 h1 {
+    cursor: pointer;
     font-size: 32pt;
     height: 60px;
     margin: calc(calc(var(--banner-height) - 60px) / 2) 0;
+    width: max-content;
 }
 
 h2 {
@@ -104,6 +117,18 @@ input {
 
 input:focus, input:hover {
     border-color: var(--input-active);
+}
+
+input[type="number"] {
+    text-align: center;
+}
+
+#dish-portioner {
+    width: 3em;
+}
+
+.set-mass {
+    width: 100%;
 }
 
 input[type="search"] {
@@ -131,6 +156,7 @@ table {
     border-spacing: 4px;
     box-sizing: border-box;
     display: table;
+    width: 100%;
 }
 
 tbody {
@@ -145,7 +171,12 @@ td {
     padding: var(--cell-pad);
     text-align: left;
     vertical-align: inherit;
-    white-space: nowrap;
+    white-space: normal;
+}
+
+td[name="result"] {
+    cursor: pointer;
+    width: auto;
 }
 
 th {
@@ -163,9 +194,9 @@ th img {
 }
 
 thead {
+    border-color: inherit;
     display: table-header-group;
     vertical-align: middle;
-    border-color: inherit;
 }
 
 tr {
@@ -191,8 +222,37 @@ tr {
     color: var(--amber-code);
 }
 
+.col1 {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.col2 {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.col3 {
+    grid-column: 3;
+    grid-row: 1;
+}
+
 .content {
     width: 70%;
+}
+
+.content-button {
+    background: var(--menu-bg);
+    border: 1px solid var(--button-border);
+    border-radius: var(--border-radius);
+    box-sizing: border-box;
+    color: var(--menu-fg);
+    font-family: inherit;
+    height: var(--content-button-height);
+    outline: none;
+    transition-duration: var(--transition-duration);
+    transition-property: border;
+    width: var(--content-button-width);
 }
 
 .credits {
@@ -202,6 +262,13 @@ tr {
 
 .entry {
     margin: 8px 0;
+}
+
+.delete {
+    background-color: var(--accent3);
+    border-radius: calc(var(--row-button-height) / 2);
+    height: var(--row-button-height);
+    width: var(--row-button-height);
 }
 
 .foot {
@@ -242,9 +309,17 @@ tr {
     margin-bottom: 18px;
 }
 
-.left-col {
-    grid-column: 1;
-    grid-row: 1;
+.ingredient-list {
+    border: 1px solid var(--table-border);
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    height: var(--result-div-height);
+    padding: 10px;
+}
+
+.ingredient-list input, td {
+    font-size: 14pt;
 }
 
 .left-button {
@@ -288,27 +363,30 @@ tr {
     justify-self: right;
 }
 
-.right-col {
-    grid-column: 2;
-    grid-row: 1;
+.rotate-center {
+	animation: rotate-center 0.4s ease-in-out both;
+}
+
+#add-button {
+    align-self: end;
+    grid-row: 3;
+    justify-self: end;
+    width: max-content;
 }
 
 #add-ingredient {
+    grid-row: 1;
     width: 100%;
 }
 
-#create-mydish {
-    background: var(--menu-bg);
-    border: 1px solid var(--button-border);
-    border-radius: var(--border-radius);
-    box-sizing: border-box;
-    color: var(--menu-fg);
-    font-family: inherit;
-    height: var(--content-button-height);
-    outline: none;
-    transition-duration: var(--transition-duration);
-    transition-property: border;
-    width: var(--content-button-width);
+#added-foods {
+    grid-row: 1;
+    height: min-content;
+}
+
+#added-list {
+    height: 100%;
+    width: 100%;
 }
 
 #dish-list {
@@ -317,20 +395,46 @@ tr {
 }
 
 #dish-namer {
-    width: 60%;
+    width: 65%;
 }
 
-#dish-portioner {
-    width: 3em;
-}
-
-#ingredient-list {
-    border: 1px solid var(--table-border);
-    padding: 10px;
+#dish-settings {
+    grid-template-columns: 2fr 1fr 1fr;
+    margin-bottom: 20px
 }
 
 #filter-toggle {
     vertical-align: middle;
+}
+
+#mass-p {
+    align-items: center;
+    column-gap: 10px;
+    display: grid;
+    align-self: end;
+    height: min-content;
+    grid-row: 2;
+    width: max-content;
+}
+
+#mass-refresh {
+    display: inline-block;
+    height: inherit;
+    justify-self: center;
+    width: 1em;
+}
+
+#result-table {
+    display: block;
+    grid-row: 2;
+    height: calc(var(--result-div-height) - 125px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#saver {
+    display: inline-flex;
+    justify-content: center;
 }
 
 [hidden] {

@@ -31,11 +31,11 @@
         <div class="content">
             <h2 class="h2-left">My dishes</h2>
             <div class="grid">
-                <div class="left-col" id="dish-search">
+                <div class="col1" id="dish-search">
                     <label for="dish-searchbox"></label>
                     <input id="dish-searchbox" name="dish-searchbox" placeholder="Find a dish" title="Find a dish" type="search">
                 </div>
-                <button class="active-button right-button" id="create-mydish">Create new dish</button>
+                <button class="active-button content-button right-button" id="create-mydish">Create new dish</button>
                 <div id="dish-list">    
                     <table>
                         <thead>
@@ -70,28 +70,29 @@
     </section>
     <section id="dish-editor" hidden>
         <div class="content">
-            <h2 id="editor-title" class="h2-left"></h2>
-            <div class="dish-settings">
-                <div class="entries grid">
-                    <div class="entry left-col" id="namer">
-                        <label for="dish-namer">Dish:</label>
-                        <input id="dish-namer" name="dish-namer" placeholder="Name your dish and press Enter" title="Name your dish and press Enter" type="text" value="">
-                    </div>
-                    <div class="entry right-col" id="portioner">
-                        <label for="dish-portioner">Portions:</label>
-                        <input id="dish-portioner" name="dish-portioner" onchange="" type="number">
-                    </div>
+            <h2 id="editor-title" class="h2-left" value=""></h2>
+            <div class="entries grid" id="dish-settings">
+                <div class="entry col1" id="namer">
+                    <label for="dish-namer">Dish:</label>
+                    <input id="dish-namer" name="dish-namer" placeholder="Name your dish and press Enter" title="Name your dish and press Enter" type="text" value="">
+                </div>
+                <div class="entry col2" id="portioner">
+                    <label for="dish-portioner">Portions:</label>
+                    <input id="dish-portioner" name="dish-portioner" onchange="" type="number">
+                </div>
+                <div class="col3 entry" id="saver">
+                    <button class="active-button content-button" id="save-edits">Save dish</button>
                 </div>
             </div>
             <div class="grid">
-                <div class="left-col">
+                <div class="col1">
                     <div class="entries">
                         <div class="entry">
-                            <label for="category-select">Choose an ingredient category:</label>
+                            <label for="category-select">Select category:</label>
                             <select name="categories" id="category-select">
-                                <option value="" selected>--Please choose an option--</option>
+                                <option value="" selected>--Please choose a category--</option>
                                 <template id="category-option">
-                                    <option name="food-cat" value=""></option>
+                                    <option name="food-cat"></option>
                                 </template>
                             </select>
                         </div>
@@ -107,40 +108,46 @@
                             </fieldset>
                         </div>
                     </div>
-                    <div id="ingredient-list">
+                    <div class="ingredient-list">
                         <div class="entry">
-                            <!-- <label for="add-ingredient">Add an ingredient</label> -->
                             <input id="add-ingredient" placeholder="Narrow down your search..." title="Narrow down your search..." type="search">
                         </div>
-                        <ul>
-                            <li>Food 1</li>
-                            <li>Food 2</li>
-                        </ul>
-                    </div>
-                    <button id="add-food">Add selected ingredient</button>
-                </div>
-                <div class="right-col">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Added Ingredients</th>
-                                <th style="width: 100px">Mass [g]</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody id="ingredient-table" name="ingredient-table">
-                            <template id="added-ingredient">
+                        <table id="result-table">
+                            <template id="result-row">
                                 <tr>
-                                    <td>Name</td>
-                                    <td>Mass</td>
-                                    <td>
-                                        <button class="delete">X</button>
-                                    </td>
+                                    <td><input type="checkbox"></td>
+                                    <td name="result">Food 1</td>
                                 </tr>
                             </template>
-                        </tbody>
-                    </table>
-                    <p>Total mass: <span id="total-mass" name="total-mass"></span></p>
+                        </table>
+                        <button class="active-button content-button" id="add-button">Add selected ingredient(s)</button>
+                    </div>
+                </div>
+                <div class="col2">
+                    <div class="ingredient-list" id="added-list">
+                        <table id="added-foods">
+                            <thead>
+                                <tr>
+                                    <th>Added Ingredients</th>
+                                    <th style="width: 100px">Mass [g]</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="ingredient-body" name="ingredient-body">
+                                <template id="added-ingredient">
+                                    <tr>
+                                        <td name="food-name">Name</td>
+                                        <td class="mass-cell"><input class="set-mass" title="Set ingredient mass" type="number"></td>
+                                        <td><button class="delete" title="Delete Ingredient">🗑️</button></td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                        <p id="mass-p">
+                            <span class="col1">Total mass: <span id="total-mass">0</span>g</span>
+                            <img src="./images/refresh.png" class="col2" id="mass-refresh">
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -148,7 +155,7 @@
     </section>
     <section id="nutrition" hidden>
         <div class="content">
-            <h2 id="nutri-title" class="h2-left"></h2>
+            <h2 id="nutri-title" class="h2-left" value=""></h2>
             <div class="grid">
                 <div class="legend">
                     <div class="colour-coding">
@@ -228,7 +235,7 @@
 
 <footer>
     <div class="credits" id="credits">
-        Firstname Lastname | Imperial College London - Design Engineering Y1 - Computing 2: Applications
+        Justin Mak | Imperial College London - Design Engineering Y1 - Computing 2: Applications
     </div>
     <div class="foot grid" id="mydishes-foot" hidden>
         <button class="active-button left-button" id="home">Homepage</button>
