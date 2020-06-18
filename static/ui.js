@@ -14,6 +14,7 @@
  *
  *  NAVIGATION BUTTONS: for flipping between the app sections, e.g. landing page, dish editor.
  *  FABULOUS FRONT-END (excluing nav buttons): for misc client-side stuff, which include filtering search results, appending selected ingredients to the 'added ingredients' table.
+ *  CALC CENTRAL: any calculations that need to be done that aren't directly tied with database operations.
  *  SERVER SCHTUFF: code that interacts with making queries with handler.js, but are unrelated to the database.
  *  DEATH BY DATABASE: death by database.
  */
@@ -36,7 +37,7 @@ ui.init = function () {
 
     const resetFields = function() {
         nameInput.value = "";
-        dishPortion.value = "";
+        dishPortion.value = "1";
         editorTitle.textContent = "";
         nutriTitle.textContent = "";
         root.setProperty("--result-div-height", "375px");
@@ -89,10 +90,6 @@ ui.init = function () {
     };
 
     // Dish editor
-    el("filter-toggle").onclick = function () {
-        const field = el("filter-set");
-        field.toggleAttribute("hidden");
-    };
     el("back-dishes").onclick = function () {
         el("dish-editor").hidden = true;
         el("editor-foot").hidden = true;
@@ -104,6 +101,8 @@ ui.init = function () {
         el("editor-foot").hidden = true;
         el("nutrition").hidden = false;
         el("nutrition-foot").hidden = false;
+
+        popTable();
     };
 
     // Nutrient Info
@@ -146,10 +145,9 @@ ui.init = function () {
             if (row.cells[0].firstElementChild.checked === true) {
                 addedFoods.push(row.lastElementChild.innerHTML);
             }
-
         }
 
-                addedFoods.forEach(function (f) {
+        addedFoods.forEach(function (f) {
             const foodTemplate = cloneTemplate("added-ingredient");
             const foodName = foodTemplate.querySelector("[name=food-name]");
 
@@ -225,6 +223,85 @@ ui.init = function () {
             }
         }
     } */
+
+    // Switching nutrient view in NI table
+    el("toggle").onclick = function () {
+        const macroRows = el("macronutrients");
+        const microRows = el("micronutrients");
+
+        macroRows.toggleAttribute("hidden");
+        microRows.toggleAttribute("hidden");
+    };
+
+    // Populate nutrition table
+    const popTable = function () {
+
+        // Populate macros tbody of the nutrition table
+        const popMacros = function () {
+            const req = {
+                "type": "fetchMacros"
+            };
+
+            const resp = Ajax.query(req);
+
+            resp.then(function (objs) {
+                const vals = objs.map((obj) => Object.values(obj));
+
+                // Create obj from new key-value pair subarrays in vals
+                const newObj = Object.fromEntries(vals)
+
+                // Get array of keys to be iterated over in the cloning process
+                const keys = Object.keys(newObj);
+
+                const macros = el("macronutrients");
+                keys.forEach(function (k) {
+                    const nutriTemplate = cloneTemplate("my-macro");
+                    const nutriName = nutriTemplate.querySelector(
+                        "[name=macro]"
+                    );
+                    nutriName.textContent = newObj[k];
+                    macros.appendChild(nutriTemplate);
+
+                    // Give each nutrient an id equal to its tagname (in the DB)
+                    nutriName.setAttribute("id", k);
+                });
+            });
+        };
+
+        popMacros()
+
+        // Populate micros tbody of the nutrition table
+        const popMicros = function () {
+            const req = {
+                "type": "fetchMicros"
+            };
+
+            const resp = Ajax.query(req);
+
+            resp.then(function (objs) {
+                const vals = objs.map((obj) => Object.values(obj));
+
+                // Create obj from new key-value pair subarrays in vals
+                const newObj = Object.fromEntries(vals)
+
+                // Get array of keys to be iterated over in the cloning process
+                const keys = Object.keys(newObj);
+
+                const micros = el("micronutrients");
+                keys.forEach(function (k) {
+                    const nutriTemplate = cloneTemplate("my-micro");
+                    const nutriName = nutriTemplate.querySelector("[name=micro]");
+                    nutriName.textContent = newObj[k];
+                    micros.appendChild(nutriTemplate);
+
+                    // Give each nutrient an id equal to its tagname in the database
+                    nutriName.setAttribute("id", k);
+                });
+            });
+        };
+
+        popMicros()
+    };
 
 
     // CALCULATION CENTRAL
@@ -327,7 +404,7 @@ ui.init = function () {
                 catName.textContent = c;
                 catSelect.appendChild(catTemplate);
 
-                // Give each category element value identical to text content
+                // Give each category element a value identical to text content
                 catName.setAttribute("value", c);
 
                 // Set clicked category as selected and others as not
@@ -386,7 +463,7 @@ ui.init = function () {
                     const results = vals.flat();
 
                     results.forEach(function (r) {
-                        const resultTemplate = cloneTemplate("result-row")
+                        const resultTemplate = cloneTemplate("result-row");
                         const resultName = resultTemplate.querySelector(
                             "[name=result]"
                         );
@@ -406,32 +483,36 @@ ui.init = function () {
 
 
     // Constructing query for nutrient data
-    // const nutriQuery = 
-    el("test").onclick = function () {
-        const ingredients = "("
+    const nutriQuery = function () {
+        let nutriTotal = {};
 
         for (let i = 0; i < foodRows.length; i++) {
-            const ingredientName = foodRows[i].cells[0].textContent
-            ingredients.concat("long_desc = '", ingredientName, "'")
+            const req = {
+                "type": "nutriTable",
+                "ingredient": foodRows[i].cells[0].textContent
+            };
 
-            // If current row is the last one, close off the SQL query
-            if (i === foodRows.length - 1){
-                ingredients.concat(")")
-            } // Otherwise, continue appending foods
-            ingredients.concat(" OR ")
-        }
+            const resp = Ajax.query(req);
 
-        const req = {
-            "type": "nutriTable",
-            "ingredients": ingredients,
-        }
+            resp.then(function (objs) {
+                const vals = objs.map((obj) => Object.values(obj));
 
-        const resp = Ajax.query(req);
+                // Create obj from new key-value pair subarrays in vals
+                const newObj = Object.fromEntries(vals)
 
-        resp.then(function (objs) {
-            console.log(objs)
-        })
-    }
+                // Ensure values are numbers rather than strings
+                for (let key in newObj) {
+                    if (!nutriTotal[key]) {
+                        nutriTotal[key] = Number(newObj[key]);
+                    } else {
+                        nutriTotal[key] += Number(newObj[key]);
+                    }
+                };
+            });
+        };
+
+        console.log(nutriTotal)
+    };
 };
 
 export default Object.freeze(ui);

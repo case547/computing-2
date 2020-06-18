@@ -63,15 +63,32 @@ handlers.catFilter = function (obj) {
 
 handlers.nutriTable = function (obj) {
     const query = (
-        "SELECT foods.long_desc, nutrients.nutrient, " +
-        "nutrientData.nutri_val, nutrients.units " +
+        "SELECT nutrients.tagname, nutrientData.nutri_val " +
         "FROM nutrientData " +
-        "INNER JOIN foods ON foods.pkFoods = nutrientData.fkFood " +
-        "INNER JOIN nutrients ON nutrients.pkNutrients = fkNutrient " +
-        "WHERE include = 1 AND ?"
+        "LEFT JOIN nutrients ON nutrients.pkNutrients = fkNutrient " +
+        "LEFT JOIN foods ON foods.pkFoods = nutrientData.fkFood " +
+        "WHERE include = 1 AND long_desc = ?"
     );
 
-    return queryPromise(query, obj.ingredients);
+    return queryPromise(query, obj.ingredient);
+};
+
+handlers.fetchMacros = function (obj) {
+    const query = (
+        "SELECT tagname, nutrient FROM nutrients " +
+        "WHERE include = 1 AND units = 'g'"
+    );
+
+    return queryPromise(query);
+};
+
+handlers.fetchMicros = function (obj) {
+    const query = (
+        "SELECT tagname, nutrient FROM nutrients " +
+        "WHERE include = 1 AND units = 'mg'"
+    );
+
+    return queryPromise(query);
 };
 
 export default Object.freeze(handler);

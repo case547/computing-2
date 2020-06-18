@@ -12,7 +12,7 @@
     --menu-button-height: 80px;
     --menu-button-width: 260px;
     --message-padding: 0.2em;
-    --result-div-height: 375px;
+    --result-div-height: 400px;
     --row-button-height: 40px;
 
     --transition-duration: 0.167s;
@@ -123,18 +123,13 @@ input[type="number"] {
     text-align: center;
 }
 
-#dish-portioner {
-    width: 3em;
-}
-
-.set-mass {
-    width: 100%;
-}
-
 input[type="search"] {
     border-radius: 0px;
 }
 
+legend {
+    width: 85%;
+}
 
 main {
     background-color: var(--card-bg);
@@ -157,6 +152,10 @@ table {
     box-sizing: border-box;
     display: table;
     width: 100%;
+}
+
+table input, table td {
+    font-size: 14pt;
 }
 
 tbody {
@@ -238,6 +237,7 @@ tr {
 }
 
 .content {
+    min-width: 1000px;
     width: 70%;
 }
 
@@ -318,14 +318,16 @@ tr {
     padding: 10px;
 }
 
-.ingredient-list input, td {
-    font-size: 14pt;
-}
-
 .left-button {
     grid-column: 1;
     grid-row: 1;
     justify-self: left;
+}
+
+.legend {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
 }
 
 .legend p {
@@ -353,6 +355,11 @@ tr {
     width: var(--menu-button-width);
 }
 
+.ni-table {
+    table-layout: fixed;
+    width: max-content;
+}
+
 .red {
     color: var(--red-code);
 }
@@ -365,6 +372,10 @@ tr {
 
 .rotate-center {
 	animation: rotate-center 0.4s ease-in-out both;
+}
+
+.set-mass {
+    width: 100%;
 }
 
 #add-button {
@@ -396,6 +407,10 @@ tr {
 
 #dish-namer {
     width: 65%;
+}
+
+#dish-portioner {
+    width: 3em;
 }
 
 #dish-settings {

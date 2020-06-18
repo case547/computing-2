@@ -78,7 +78,7 @@
                 </div>
                 <div class="entry col2" id="portioner">
                     <label for="dish-portioner">Portions:</label>
-                    <input id="dish-portioner" min="1" name="dish-portioner" type="number" value="1">
+                    <input id="dish-portioner" min="1" name="dish-portioner" required type="number" value="1">
                 </div>
                 <div class="col3 entry" id="saver">
                     <button class="active-button content-button" id="save-edits">Save dish</button>
@@ -95,17 +95,6 @@
                                     <option name="food-cat"></option>
                                 </template>
                             </select>
-                        </div>
-                        <div class="entry">
-                            <label for="filter-set">Filters</label>
-                            <button id="filter-toggle">Show/Hide</button>
-                            <fieldset id="filter-set" hidden>
-                                <input type="checkbox" id="option1" name="option1">
-                                <label for="option1">Option 1</label>
-                                <br/>
-                                <input type="checkbox" id="option2" name="option1">
-                                <label for="option2">Option 2</label><br/>
-                            </fieldset>
                         </div>
                     </div>
                     <div class="ingredient-list">
@@ -159,6 +148,9 @@
             <h2 id="nutri-title" class="h2-left" value=""></h2>
             <div class="grid">
                 <div class="legend">
+                    <div class="entry">
+                        <button id="toggle">Switch between macronutrients/micronutrients</button>
+                    </div>
                     <div class="colour-coding">
                         <strong>Nutrition Colour Code:</strong>
                         <p><span class="red">Red</span> - eat less often and in small amounts
@@ -169,68 +161,62 @@
                         <strong>RI:</strong>
                         <p>Amount of a nutrient you should consume in one day</p>
                     </div>
+                    <fieldset id="def-set">
+                        <legend>What is 'Carbohydrate by difference'?</legend>
+                        <p>The difference between 100 and sum of the percentages of water, protein, total lipid (fat), ash, and alcohol (when present). Inclusive of dietary fibre and sugars.</p>
+                    </fieldset>
                 </div>
                 <table class="ni-table">
-                    <tr>
-                        <th>Nutrient</th>
-                        <th>Per <span id="portion-mass" name="portion-mass">g portion</span></th>
-                        <th>Per 100g</th>
-                        <th title="Reference Intake: amount of a nutrient you should consume in a day">RI</th>
-                        <th title="Nutrition colour coding: tells you if the food has high, medium or low amounts of fat, saturated fat, sugars and salt."><img src="./images/traffic-light.png"></th>
-                    </tr>
-                    <tr id="energy">
-                        <td>Energy</td>
-                        <td>kcal</td>
-                        <td>kcal</td>
-                        <td>%</td>
-                        <td></td>
-                    </tr>
-                    <tr id="protein">
-                        <td>Protein</td>
-                        <td>g</td>
-                        <td>g</td>
-                        <td>%</td>
-                        <td></td>
-                    </tr>
-                    <tr id="fat">
-                        <td>Fat</td>
-                        <td>g</td>
-                        <td>g</td>
-                        <td>%</td>
-                        <td></td>
-                    </tr>
-                    <tr id="sat-fat">
-                        <td> - Saturated Fat</td>
-                        <td>g</td>
-                        <td>g</td>
-                        <td>%</td>
-                        <td></td>
-                    </tr>
-                    <tr id="carb">
-                        <td>Carbohydrate</td>
-                        <td>g</td>
-                        <td>g</td>
-                        <td>%</td>
-                        <td></td>
-                    </tr>
-                    <tr id="sugars">
-                        <td> - Sugars</td>
-                        <td>g</td>
-                        <td>g</td>
-                        <td>%</td>
-                        <td></td>
-                    </tr>
-                    <tr id="sodium">
-                        <td>Sodium</td>
-                        <td>g</td>
-                        <td>g</td>
-                        <td>%</td>
-                        <td></td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>Nutrient</th>
+                            <th>Per <span id="portion-mass" name="portion-mass">g portion</span></th>
+                            <th>Per 100g</th>
+                            <th title="Reference Intake: amount of a nutrient you should consume in a day">RI</th>
+                            <th title="Nutrition colour coding: tells you if the food has high, medium or low amounts of fats, sugars, and salt."><img src="./images/traffic-light.png"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="energy">
+                        <tr name="ENERC_KCAL">
+                            <td>Energy (kcal)</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr name="ENERC_KJ">
+                            <td>Energy (kJ)</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                    <tbody id="macronutrients">
+                        <template id="my-macro">
+                            <tr>
+                                <td name="macro">Macro</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </template>
+                    </tbody>
+                    <tbody id="micronutrients" hidden>
+                        <template id="my-micro">
+                            <tr>
+                                <td name="micro">Micro</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </template>
+                    </tbody>
                 </table>
             </div>
         </div>
-        
     </section>
 </main>
 
