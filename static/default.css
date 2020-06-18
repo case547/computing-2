@@ -335,6 +335,16 @@ tr {
     margin-top: 5px;
 }
 
+.legend .entry {
+    align-self: end;
+    margin-bottom: 20px;
+}
+
+.med-col {
+    box-sizing: border-box;
+    width: 100px;
+}
+
 .menu {
     display: flex;
     justify-content: space-around;
@@ -357,6 +367,7 @@ tr {
 
 .ni-table {
     table-layout: fixed;
+    height: 300px;
     width: max-content;
 }
 
@@ -378,6 +389,11 @@ tr {
     width: 100%;
 }
 
+.wide-col {
+    box-sizing: border-box;
+    width: 270px;
+}
+
 #add-button {
     align-self: end;
     grid-row: 3;
@@ -386,13 +402,19 @@ tr {
 }
 
 #add-ingredient {
+    font-size: 14pt;
     grid-row: 1;
     width: 100%;
 }
 
 #added-foods {
+    display: block;
     grid-row: 1;
     height: min-content;
+    max-height: 300px;
+    table-layout: fixed;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 #added-list {
@@ -418,8 +440,10 @@ tr {
     margin-bottom: 20px
 }
 
-#filter-toggle {
-    vertical-align: middle;
+#toggle {
+    border-radius: calc(var(--content-button-height) / 2) var(--border-radius) var(--border-radius) calc(var(--content-button-height) / 2);
+    justify-self: right;
+    width: max-content;
 }
 
 #mass-p {

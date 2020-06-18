@@ -117,8 +117,8 @@
                         <table id="added-foods">
                             <thead>
                                 <tr>
-                                    <th>Added Ingredients</th>
-                                    <th style="width: 100px">Mass [g]</th>
+                                    <th class="wide-col">Added Ingredients</th>
+                                    <th class="med-column">Mass [g]</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -126,8 +126,8 @@
                                 <template id="added-ingredient">
                                     <tr>
                                         <td name="food-name">Name</td>
-                                        <td class="mass-cell"><input class="set-mass" min="0" title="Set ingredient mass" type="number" value="0"></td>
-                                        <td><button class="delete" title="Delete Ingredient">🗑️</button></td>
+                                        <td class="mass-cell"><input class="set-mass" min="1" title="Set ingredient mass" type="number" value="1"></td>
+                                        <td><button class="delete" name="delete-food" title="Delete Ingredient">🗑️</button></td>
                                     </tr>
                                 </template>
                             </tbody>
@@ -149,7 +149,7 @@
             <div class="grid">
                 <div class="legend">
                     <div class="entry">
-                        <button id="toggle">Switch between macronutrients/micronutrients</button>
+                        <button class="active-button content-button" id="toggle">Switch between macro-/micronutrients</button>
                     </div>
                     <div class="colour-coding">
                         <strong>Nutrition Colour Code:</strong>
@@ -166,27 +166,27 @@
                         <p>The difference between 100 and sum of the percentages of water, protein, total lipid (fat), ash, and alcohol (when present). Inclusive of dietary fibre and sugars.</p>
                     </fieldset>
                 </div>
-                <table class="ni-table">
+                <table class="ni-table" id="ni-table">
                     <thead>
                         <tr>
                             <th>Nutrient</th>
-                            <th>Per <span id="portion-mass" name="portion-mass">g portion</span></th>
+                            <th>Per <span id="portion-mass"></span>g portion</th>
                             <th>Per 100g</th>
                             <th title="Reference Intake: amount of a nutrient you should consume in a day">RI</th>
                             <th title="Nutrition colour coding: tells you if the food has high, medium or low amounts of fats, sugars, and salt."><img src="./images/traffic-light.png"></th>
                         </tr>
                     </thead>
                     <tbody id="energy">
-                        <tr name="ENERC_KCAL">
+                        <tr>
                             <td>Energy (kcal)</td>
-                            <td></td>
+                            <td id="ENERC_KCAL"></td>
                             <td></td>
                             <td></td>
                             <td></td>
                         </tr>
-                        <tr name="ENERC_KJ">
+                        <tr>
                             <td>Energy (kJ)</td>
-                            <td></td>
+                            <td id="ENERC_KJ"></td>
                             <td></td>
                             <td></td>
                             <td></td>

@@ -33,10 +33,14 @@ const actionPromise = function (query, ...queryParams) {
     });
 };
 
+
 const handler = function (obj) {
     // handlers.[any] corresponding with value of "type" key in reqs in ui.js
     return Promise.resolve(handlers[obj.type](obj));
 };
+
+
+// NON-DATABASE QUERIES
 
 handlers.nameDish = function (obj) {
     const dishName = obj.output; // where output is a key
@@ -44,6 +48,19 @@ handlers.nameDish = function (obj) {
         "output": dishName
     });
 };
+
+handlers.calcPortion = function (obj) {
+    const dishPortions = obj.portions;
+    const totalMass = obj.mass;
+
+    return Promise.resolve({
+        "portions": dishPortions,
+        "mass": totalMass
+    });
+};
+
+
+// DATABASE QUERIES
 
 handlers.fetchCategories = function (obj) {
     const query = ("SELECT category FROM categories");

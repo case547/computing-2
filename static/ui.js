@@ -30,17 +30,37 @@ ui.init = function () {
     const root = document.documentElement.style;
 
     // Clearing inputs
-    const nameInput = el("dish-namer");
-    const dishPortion = el("dish-portioner");
-    const editorTitle = el("editor-title");
-    const nutriTitle = el("nutri-title");
+    const catSelect = el("category-select"); // Category select dropdown
+    const dishPortion = el("dish-portioner"); // Portion number input
+    const editorTitle = el("editor-title"); // h2 in dish editor section
+    const foodBody = el("ingredient-body"); // Added ingredients tbody
+    const nameInput = el("dish-namer"); // Dish name text input
+    const nutriTitle = el("nutri-title"); // h2 in nutri info section
+    const resultTable = el("result-table"); // Search results table
+    const searchbar = el("add-ingredient"); // Food search text input
 
     const resetFields = function() {
         nameInput.value = "";
         dishPortion.value = "1";
         editorTitle.textContent = "";
         nutriTitle.textContent = "";
+        searchbar.value = "";
+        catSelect.value = "";
         root.setProperty("--result-div-height", "375px");
+
+        const clearRows = function (t) {
+            let i = t.rows.length;
+            while (true) {
+                if (i < 1) {
+                    break;
+                }
+                t.deleteRow(0);
+                i -= 1;
+            }
+        };
+
+        clearRows(foodBody);
+        clearRows(resultTable);
     };
 
 
@@ -97,12 +117,18 @@ ui.init = function () {
         el("mydishes-foot").hidden = false;
     };
     el("see-info").onclick = function () {
-        el("dish-editor").hidden = true;
-        el("editor-foot").hidden = true;
-        el("nutrition").hidden = false;
-        el("nutrition-foot").hidden = false;
+        sumMasses();
+        calcPortion();
+        nutriQuery();
 
-        popTable();
+        const toggle = function() {
+            el("dish-editor").hidden = true;
+            el("editor-foot").hidden = true;
+            el("nutrition").hidden = false;
+            el("nutrition-foot").hidden = false;
+        };
+
+        setTimeout(toggle, 0);
     };
 
     // Nutrient Info
@@ -117,8 +143,6 @@ ui.init = function () {
     // FABULUOUS FRONT-END (excluding nav buttons)
 
     // Filtering results based on searchbar input
-    const searchbar = el("add-ingredient");
-    const resultTable = el("result-table");
     const resultRows = resultTable.rows;
 
     searchbar.onkeyup = function () {
@@ -136,7 +160,6 @@ ui.init = function () {
 
     // Adding selected ingredients
     const addFood = el("add-button");
-    const foodBody = el("ingredient-body");
     addFood.onclick = function () {
         const addedFoods = [];
 
@@ -145,20 +168,25 @@ ui.init = function () {
             if (row.cells[0].firstElementChild.checked === true) {
                 addedFoods.push(row.lastElementChild.innerHTML);
             }
-        }
+        };
 
         addedFoods.forEach(function (f) {
             const foodTemplate = cloneTemplate("added-ingredient");
             const foodName = foodTemplate.querySelector("[name=food-name]");
+            const del = foodTemplate.querySelector("[name=delete-food]")
 
-            // Set text content and add to template
+            // Set food text content and add to template
             foodName.textContent = f;
             foodBody.appendChild(foodTemplate);
+
+            del.onclick = function () {
+                const childRow = del.parentNode.parentNode;
+                foodBody.removeChild(childRow);
+            }
         });
     };
 
     // Removing rows in the added ingredients table
-    const foodRows = foodBody.rows;
 
     /* const dels = [];
 
@@ -235,82 +263,110 @@ ui.init = function () {
 
     // Populate nutrition table
     const popTable = function () {
+        const nutriTable = el("ni-table");
 
-        // Populate macros tbody of the nutrition table
-        const popMacros = function () {
-            const req = {
-                "type": "fetchMacros"
+        if (nutriTable.rows.length < 4) {
+
+            // Populate nutrient names into macro tbody
+            const popMacros = function () {
+                const req = {
+                    "type": "fetchMacros"
+                };
+
+                const resp = Ajax.query(req);
+
+                resp.then(function (objs) {
+                    const vals = objs.map((obj) => Object.values(obj));
+
+                    // Create obj from new key-value pair subarrays in vals
+                    const newObj = Object.fromEntries(vals)
+
+                    // Get iterable array of keys for cloning
+                    const keys = Object.keys(newObj);
+
+                    const macros = el("macronutrients");
+                    keys.forEach(function (k) {
+                        const nutriTemplate = cloneTemplate("my-macro");
+                        const nutriName = nutriTemplate.querySelector(
+                            "[name=macro]"
+                        );
+                        nutriName.textContent = newObj[k];
+                        macros.appendChild(nutriTemplate);
+
+                        // Give each nutrient an id = its tagname (DB column)
+                        nutriName.nextElementSibling.setAttribute("id", k);
+                    });
+                });
             };
 
-            const resp = Ajax.query(req);
+            popMacros();
 
-            resp.then(function (objs) {
-                const vals = objs.map((obj) => Object.values(obj));
+            // Populate nutrient names for micro tbody
+            const popMicros = function () {
+                const req = {
+                    "type": "fetchMicros"
+                };
 
-                // Create obj from new key-value pair subarrays in vals
-                const newObj = Object.fromEntries(vals)
+                const resp = Ajax.query(req);
 
-                // Get array of keys to be iterated over in the cloning process
-                const keys = Object.keys(newObj);
+                resp.then(function (objs) {
+                    const vals = objs.map((obj) => Object.values(obj));
 
-                const macros = el("macronutrients");
-                keys.forEach(function (k) {
-                    const nutriTemplate = cloneTemplate("my-macro");
-                    const nutriName = nutriTemplate.querySelector(
-                        "[name=macro]"
-                    );
-                    nutriName.textContent = newObj[k];
-                    macros.appendChild(nutriTemplate);
+                    const newObj = Object.fromEntries(vals)
 
-                    // Give each nutrient an id equal to its tagname (in the DB)
-                    nutriName.setAttribute("id", k);
+                    const keys = Object.keys(newObj);
+
+                    const micros = el("micronutrients");
+                    keys.forEach(function (k) {
+                        const nutriTemplate = cloneTemplate("my-micro");
+                        const nutriName = nutriTemplate.querySelector(
+                            "[name=micro]"
+                        );
+                        nutriName.textContent = newObj[k];
+                        micros.appendChild(nutriTemplate);
+
+                        nutriName.nextElementSibling.setAttribute("id", k);
+                    });
                 });
-            });
-        };
-
-        popMacros()
-
-        // Populate micros tbody of the nutrition table
-        const popMicros = function () {
-            const req = {
-                "type": "fetchMicros"
             };
 
-            const resp = Ajax.query(req);
+            popMicros();
+        }
 
-            resp.then(function (objs) {
-                const vals = objs.map((obj) => Object.values(obj));
-
-                // Create obj from new key-value pair subarrays in vals
-                const newObj = Object.fromEntries(vals)
-
-                // Get array of keys to be iterated over in the cloning process
-                const keys = Object.keys(newObj);
-
-                const micros = el("micronutrients");
-                keys.forEach(function (k) {
-                    const nutriTemplate = cloneTemplate("my-micro");
-                    const nutriName = nutriTemplate.querySelector("[name=micro]");
-                    nutriName.textContent = newObj[k];
-                    micros.appendChild(nutriTemplate);
-
-                    // Give each nutrient an id equal to its tagname in the database
-                    nutriName.setAttribute("id", k);
-                });
-            });
-        };
-
-        popMicros()
+        setTimeout(fillData, 1000)
     };
+
+    // For filling in nutrient values in the NI table
+    const fillData = function () {
+        for (let k in nutriTotal) {
+            // Round numbers to 4 s.f.
+            const precise = function (x) {
+                const fourSF = Number.parseFloat(x).toPrecision(4);
+                const threeDP = Number.parseFloat(x).toFixed(3);
+
+                if (fourSF.length <= threeDP.length) {
+                    return fourSF;
+                }
+                return threeDP;
+            };
+
+            // Get nutrient values per portion and fill appropriate cell
+            const perPortion = nutriTotal[k] / dishPortion.valueAsNumber;
+            el(k).textContent = precise(perPortion);
+
+            // Get nutrient values per 100g and fill appropriate cell
+            const hundredG = nutriTotal[k] / Number(totalMass.innerHTML) * 100;
+            el(k).nextElementSibling.textContent = precise(hundredG);
+        };
+    }
 
 
     // CALCULATION CENTRAL
 
     // Setting total mass value
     const totalMass = el("total-mass");
-    const refreshMass = el("mass-refresh");
 
-    refreshMass.onclick = function () {
+    const sumMasses = function () {
         // When clicked, give button the class that rotates (by CSS animation)
         refreshMass.className = "col2 rotate-center";
 
@@ -335,13 +391,6 @@ ui.init = function () {
             rows, (row) => row.cells[1].firstChild.valueAsNumber
         );
 
-        // Edge case consideration: replace NaN masses with 0
-        tds.forEach(function (td) {
-            if (td === NaN) {
-                tds = 0;
-            }
-        });
-
         // Pass reduce func to task queue in case user adds loads of stuff
         const reducer = (a, b) => a + b;
         setTimeout(function () {
@@ -349,6 +398,11 @@ ui.init = function () {
         }, 0);
     };
 
+    // Call sumMasses when the refresher is clicked
+    const refreshMass = el("mass-refresh");
+    refreshMass.onclick = function () {
+        sumMasses();
+    }
 
     // SERVER SCHTUFF
 
@@ -378,6 +432,24 @@ ui.init = function () {
         event.preventDefault();
     };
 
+    const calcPortion = function () {
+        const req = {
+            "type": "calcPortion",
+            "portions": dishPortion.value,
+            "mass": totalMass.textContent
+        }
+
+        const resp = Ajax.query(req);
+        const respCalc = resp.then(
+            (resp) => Number(resp.mass)/Number(resp.portions)
+        );
+
+        const portionMass = el("portion-mass")
+        respCalc.then(function (por) {
+            portionMass.textContent = por;
+        })
+    }
+
 
     // DEATH BY DATABASE
 
@@ -394,7 +466,6 @@ ui.init = function () {
             const cats = vals.flat();
 
             // Dynamically generating category options
-            const catSelect = el("category-select");
             const options = [];
             cats.forEach(function (c, i) {
                 // Generic template stuff
@@ -432,7 +503,6 @@ ui.init = function () {
     };
 
     // Creating search result table
-    const catSelect = el("category-select");
     const options = catSelect.getElementsByTagName("option");
 
     const catFilter = function () {
@@ -472,8 +542,8 @@ ui.init = function () {
 
                         // Clicking name cell now equal to clicking checkbox
                         resultName.onclick = function () {
-                            resultName.parentElement.cells[0]
-                            .firstElementChild.click();
+                            resultName.previousElementSibling
+                            .firstChild.click();
                         };
                     });
                 });
@@ -483,9 +553,8 @@ ui.init = function () {
 
 
     // Constructing query for nutrient data
-    const nutriQuery = function () {
-        let nutriTotal = {};
-
+    let nutriTotal = {};
+    const nutriQuery = function (callback) {
         for (let i = 0; i < foodRows.length; i++) {
             const req = {
                 "type": "nutriTable",
@@ -500,18 +569,22 @@ ui.init = function () {
                 // Create obj from new key-value pair subarrays in vals
                 const newObj = Object.fromEntries(vals)
 
-                // Ensure values are numbers rather than strings
+                // Ensure values are numbers and multiply respective mass
+                const massFraction = (
+                    foodRows[i].cells[1].children[0].valueAsNumber / 100
+                );
+
                 for (let key in newObj) {
                     if (!nutriTotal[key]) {
-                        nutriTotal[key] = Number(newObj[key]);
+                        nutriTotal[key] = Number(newObj[key]) * massFraction;
                     } else {
-                        nutriTotal[key] += Number(newObj[key]);
+                        nutriTotal[key] += Number(newObj[key]) * massFraction;
                     }
                 };
             });
         };
 
-        console.log(nutriTotal)
+        popTable();
     };
 };
 
