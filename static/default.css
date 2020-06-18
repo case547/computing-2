@@ -18,7 +18,7 @@
     --transition-duration: 0.167s;
 
     --accent0: #50e3c2;
-    --accent1: #ed5f41;
+    --accent1: #ffa500;
     --accent2: #b5e37c;
     --accent3: #ed585d;
     --base0: #232629;
@@ -326,7 +326,7 @@ tr {
 
 .legend {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     flex-direction: column;
 }
 
@@ -461,6 +461,10 @@ tr {
     height: inherit;
     justify-self: center;
     width: 1em;
+}
+
+#nutri-info {
+    margin-top: 50px;
 }
 
 #result-table {

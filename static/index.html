@@ -19,11 +19,11 @@
 <main>
     <section id="landing">
         <div class="content">
-            <h2 class="h2-centred">Hello, <span id="username" name="username"></h2>
+            <h2 class="h2-centred">Hello!<span id="username" name="username"></h2>
             <div class="menu">
-                <button id="create-newdish" class="active-button">Create a new dish</button>
-                <button id="view" class="active-button">View your dishes</button>
-                <button id="browse" class="active-button">Browse all dishes</button>
+                <button id="create-newdish" class="active-button">Create a dish</button>
+                <button id="view" class="active-button" hidden>View your dishes</button>
+                <button id="browse" class="active-button" hidden>Browse all dishes</button>
             </div>
         </div>
     </section>
@@ -81,7 +81,7 @@
                     <input id="dish-portioner" min="1" name="dish-portioner" required type="number" value="1">
                 </div>
                 <div class="col3 entry" id="saver">
-                    <button class="active-button content-button" id="save-edits">Save dish</button>
+                    <button class="active-button content-button" id="save-edits" hidden>Save dish</button>
                 </div>
             </div>
             <div class="grid">
@@ -135,7 +135,6 @@
                         <p id="mass-p">
                             <span class="col1">Total mass: <span id="total-mass">0</span>g</span>
                             <img src="./images/refresh.png" class="col2" id="mass-refresh">
-                            <button id="test">Test</button>
                         </p>
                     </div>
                 </div>
@@ -144,78 +143,69 @@
         
     </section>
     <section id="nutrition" hidden>
-        <div class="content">
-            <h2 id="nutri-title" class="h2-left" value=""></h2>
-            <div class="grid">
-                <div class="legend">
-                    <div class="entry">
-                        <button class="active-button content-button" id="toggle">Switch between macro-/micronutrients</button>
-                    </div>
-                    <div class="colour-coding">
-                        <strong>Nutrition Colour Code:</strong>
-                        <p><span class="red">Red</span> - eat less often and in small amounts
-                            <br><span class="amber">Amber</span> - can be eaten most of the time
-                            <br><span class="green">Green</span> - a healthier choice</p>
-                    </div>
-                    <div class="ref-intake">
-                        <strong>RI:</strong>
-                        <p>Amount of a nutrient you should consume in one day</p>
-                    </div>
-                    <fieldset id="def-set">
-                        <legend>What is 'Carbohydrate by difference'?</legend>
-                        <p>The difference between 100 and sum of the percentages of water, protein, total lipid (fat), ash, and alcohol (when present). Inclusive of dietary fibre and sugars.</p>
-                    </fieldset>
+        <div class="content grid" id="nutri-info">
+            <div class="legend">
+                <h2 id="nutri-title" class="h2-left" value=""></h2>
+                <div class="entry">
+                    <button class="active-button content-button" id="toggle">Switch between macro-/micronutrients</button>
                 </div>
-                <table class="ni-table" id="ni-table">
-                    <thead>
-                        <tr>
-                            <th>Nutrient</th>
-                            <th>Per <span id="portion-mass"></span>g portion</th>
-                            <th>Per 100g</th>
-                            <th title="Reference Intake: amount of a nutrient you should consume in a day">RI</th>
-                            <th title="Nutrition colour coding: tells you if the food has high, medium or low amounts of fats, sugars, and salt."><img src="./images/traffic-light.png"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="energy">
-                        <tr>
-                            <td>Energy (kcal)</td>
-                            <td id="ENERC_KCAL"></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Energy (kJ)</td>
-                            <td id="ENERC_KJ"></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                    <tbody id="macronutrients">
-                        <template id="my-macro">
-                            <tr>
-                                <td name="macro">Macro</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </template>
-                    </tbody>
-                    <tbody id="micronutrients" hidden>
-                        <template id="my-micro">
-                            <tr>
-                                <td name="micro">Micro</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </template>
-                    </tbody>
-                </table>
+                <div class="colour-coding">
+                    <strong>Nutrition Colour Code:</strong>
+                    <p>
+                        <span class="red">Red</span> - eat less often and in small amounts
+                        <br><span class="amber">Amber</span> - can be eaten most of the time
+                        <br><span class="green">Green</span> - a healthier choice
+                    </p>
+                </div>
+                <fieldset id="def-set">
+                    <legend>Carbohydrate by difference?</legend>
+                    <p>The difference between 100 and sum of the percentages of water, protein, total lipid (fat), ash, and alcohol (when present). Included within this quantity are dietary fibre and sugars.</p>
+                </fieldset>
             </div>
+            <table class="ni-table" id="ni-table">
+                <thead>
+                    <tr>
+                        <th>Nutrient</th>
+                        <th>Per <span id="portion-mass"></span>g portion</th>
+                        <th>Per 100g</th>
+                        <th title="Nutrition colour coding: tells you if the food has high, medium or low amounts of fats, sugars, and salt."><img src="./images/traffic-light.png"></th>
+                    </tr>
+                </thead>
+                <tbody id="energy">
+                    <tr>
+                        <td>Energy (kcal)</td>
+                        <td id="ENERC_KCAL"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Energy (kJ)</td>
+                        <td id="ENERC_KJ"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+                <tbody id="macronutrients">
+                    <template id="my-macro">
+                        <tr>
+                            <td name="macro">Macro</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </template>
+                </tbody>
+                <tbody id="micronutrients" hidden>
+                    <template id="my-micro">
+                        <tr>
+                            <td name="micro">Micro</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
         </div>
     </section>
 </main>
@@ -229,7 +219,7 @@
         <button class="active-button right-button" id="edit" hidden>Edit dish</button>
     </div>
     <div class="foot grid" id="editor-foot" hidden>
-        <button class="active-button left-button" id="back-dishes">Back to My Dishes</button>
+        <button class="active-button left-button" id="back-dishes" hidden>Back to My Dishes</button>
         <button class="active-button right-button" id="see-info">See nutrient information</button>
     </div>
     <div class="foot grid" id="nutrition-foot" hidden>

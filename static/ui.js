@@ -46,7 +46,7 @@ ui.init = function () {
         nutriTitle.textContent = "";
         searchbar.value = "";
         catSelect.value = "";
-        root.setProperty("--result-div-height", "375px");
+        root.setProperty("--result-div-height", "400px");
 
         const clearRows = function (t) {
             let i = t.rows.length;
@@ -117,18 +117,22 @@ ui.init = function () {
         el("mydishes-foot").hidden = false;
     };
     el("see-info").onclick = function () {
-        sumMasses();
-        calcPortion();
-        nutriQuery();
+        if (!editorTitle.textContent) {
+            alert("Give your dish a name!");
+        } else {
+            sumMasses();
+            calcPortion();
+            nutriQuery();
 
-        const toggle = function() {
-            el("dish-editor").hidden = true;
-            el("editor-foot").hidden = true;
-            el("nutrition").hidden = false;
-            el("nutrition-foot").hidden = false;
-        };
+            const toggle = function() {
+                el("dish-editor").hidden = true;
+                el("editor-foot").hidden = true;
+                el("nutrition").hidden = false;
+                el("nutrition-foot").hidden = false;
+            };
 
-        setTimeout(toggle, 0);
+            setTimeout(toggle, 0);
+        }
     };
 
     // Nutrient Info
@@ -179,78 +183,13 @@ ui.init = function () {
             foodName.textContent = f;
             foodBody.appendChild(foodTemplate);
 
+            // Remove the row when the delete button is clicked
             del.onclick = function () {
                 const childRow = del.parentNode.parentNode;
                 foodBody.removeChild(childRow);
             }
         });
     };
-
-    // Removing rows in the added ingredients table
-
-    /* const dels = [];
-
-    const delRow = function (i) {
-        foodBody.removeChild(foodRows[i]);
-    };
-
-    Array.from(foodRows).forEach(function (row) {
-        const del = row.cells[2].children[0];
-        del.onclick = function () {
-            foodBody.removeChild(foodRows[foodRows.indexOf(row)]);
-        };
-    }); */
-
-    /* for (let i; i < foodRows.length; i++) {
-        const del = foodRows[i].cells[2].children[0]
-        dels.push(del);
-    }
-
-    const delNames = [];
-    dels.forEach(function (i) {
-        const delName = document.querySelector("[class=delete]")
-        delNames.push(delName)
-
-        delName.onclick = function () {
-            console.log("click")
-            foodRows.removeChild(dels[i])
-        };
-        if (i === 0) {
-            botName.onclick()
-        }
-    }) */
-
-    /* for (let i; i < foodRows.length; i++) {
-        const del = foodRows[i].cells[2].children[0]
-        del.onclick = function () {
-            console.log("click")
-            foodBody.deleteRow(i)
-        }
-    } */
-
-    /* let i = 0;
-    while (true) {
-        if (i >= foodRows.length) {
-            break;
-        }
-        const del = foodRows[i].cells[2].firstChild;
-        del.onclick = function () {
-            foodRows.deleteRow(i);
-        };
-    } */
-
-    /* const dels = []
-    for (let row of foodRows) {
-        if (foodRows.length > 0) {
-            const del = row.cells[2].children[0]
-            del.onclick = function () {
-                console.log("click")
-                foodRows.deleteRow(
-                    (Array.from(foodRows)).indexOf(row)
-                )
-            }
-        }
-    } */
 
     // Switching nutrient view in NI table
     el("toggle").onclick = function () {
@@ -360,6 +299,30 @@ ui.init = function () {
         };
     }
 
+    // Save dish button
+    // Unfortunately ran out of time
+    /* el("save-edits").onclick = function () {
+        } else {
+            const request = {
+                "type": "newDish",
+                "dish": editorTitle.innerHTML,
+                "portions": dishPortion.valueAsNumber
+            }
+
+            const resp = Ajax.query(request)
+
+            resp.then(function (object) {
+                console.log(JSON.stringify(object))
+            })
+
+            const respMessage = resp.then((res) => res.message);
+
+            respMessage.then(function (msg) {
+                console.log(msg);
+            });
+        }
+    } */
+
 
     // CALCULATION CENTRAL
 
@@ -427,7 +390,7 @@ ui.init = function () {
         });
 
         // Reduce table div heights when dish title is generated
-        root.setProperty("--result-div-height", "300px");
+        root.setProperty("--result-div-height", "325px");
 
         event.preventDefault();
     };
@@ -553,6 +516,7 @@ ui.init = function () {
 
 
     // Constructing query for nutrient data
+    const foodRows = foodBody.rows;
     let nutriTotal = {};
     const nutriQuery = function (callback) {
         for (let i = 0; i < foodRows.length; i++) {
